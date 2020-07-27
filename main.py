@@ -1,9 +1,14 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkinter import Canvas
 window = tk.Tk()
 window.geometry("1300x900")
 window['bg']=('#FCAFAF')
 pixelVirtual = tk.PhotoImage(width=1,height=1)
+
+canvas = Canvas(width=1300,height=900,bg="#FCAFAF")
+canvas.pack()
+redsquare = canvas.create_rectangle(492,260,1287,884,fill="#ED6868")
 
 title = tk.Label(text='MEDpress',font=("Helvetica", 18),bg=window['bg'])
 title.pack()
@@ -55,7 +60,7 @@ Xbutton = tk.Button(
     image=pixelVirtual,
     width=40,
     height=40,
-    bg="grey",
+    bg="lightgrey",
     compound="c"
 )
 Xbutton.place(x=1241,y=44)
@@ -99,5 +104,62 @@ savebutton = tk.Button(
     compound="c"
 )
 savebutton.place(y=224,x=320)
+
+startbutton = tk.Button(
+    text="Rozpocznij wypis",
+    image=pixelVirtual,
+    width=131,
+    height=32,
+    bg="lightgrey",
+    compound="c"
+)
+startbutton.place(x=840,y=201)
+
+clipboardbutton = tk.Button(
+    text="Do schowka",
+    image=pixelVirtual,
+    width=131,
+    height=32,
+    bg="lightgrey",
+    compound="c"
+)
+clipboardbutton.place(x=998,y=201)
+
+exportbutton = tk.Button(
+    text="Eksport pdf/rtf",
+    image=pixelVirtual,
+    width=131,
+    height=32,
+    bg="lightgrey",
+    compound="c"
+)
+exportbutton.place(x=1156,y=201)
+
+progressbar= ttk.Progressbar(orient="horizontal", length=500, mode="determinate")
+progressbar.place(x=511,y=853)
+progressbar['value']=20
+
+progresslabel = tk.Label(
+    text="Szablon w kolejce 0/X",
+    font=("Helvetica", 10),
+    bg=("#ED6868")
+)
+progresslabel.place(x=1020,y=850)
+
+backspacebutton = tk.Button(
+    text="Cofnij etap",
+    image=pixelVirtual,
+    width=100,
+    height=32,
+    bg="lightgrey",
+    compound="c"
+)
+backspacebutton.place(x=1175,y=839)
+
+""" //////////////////////FRONTSCREEN/////////////////////////////"""
+
+
+
+
 
 window.mainloop() 
