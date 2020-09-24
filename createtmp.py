@@ -1,7 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame
-from main import MEDpress
 
 
 

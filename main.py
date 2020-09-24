@@ -1,9 +1,9 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-from tkinter import Canvas, Frame
-import keyboard
-from template import *
-
+from tkinter import Canvas, Frame, INSERT, END
+from createtmp import *
+from item import ListItem
+from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
 
 class MEDpress(object):
     def __init__(self, parent):
@@ -12,6 +12,16 @@ class MEDpress(object):
         self.frame = tk.Frame(parent)
         self.frame.pack()
         self.root['bg']="#FCAFAF"
+
+
+        self.JinjaEnv = Environment(
+            loader=FileSystemLoader('szablony'),
+            autoescape=select_autoescape(['txt', 'xml'])
+        )
+
+        #template = self.JinjaEnv.get_template('szablon.txt')
+
+        #druk = template.render(imie="Jan",nazwisko="Kowalski")
         
 
         canvas = Canvas(self.frame,width=1300,height=900,bg="#FCAFAF")
@@ -50,12 +60,13 @@ class MEDpress(object):
         button3.pack()
         button3.place(y=44,x=479)
 
-        textfield=tk.Text(
+        self.textfield=tk.Text(
             self.frame,
             bg='white',
         )
-        textfield.pack()
-        textfield.place(y=44,x=714,height=147,width=573)
+        #textfield.insert(INSERT, druk)
+        self.textfield.pack()
+        self.textfield.place(y=44,x=714,height=147,width=573)
 
         texfieldlabel = tk.Label(
             self.frame,
@@ -76,6 +87,11 @@ class MEDpress(object):
         Xbutton.pack()
         Xbutton.place(x=1250,y=44)
 
+        testowe=ListItem("Złamanie nogi","złamnog","szablon.txt")
+        self.templateStack = []
+        self.templateStack.append(testowe)
+        
+
         tree= ttk.Treeview()
         tree["columns"]=("COL2","COL3")
         tree.column("#0",width=100)
@@ -85,7 +101,7 @@ class MEDpress(object):
         tree.column("COL3",width=100)
         tree.heading("COL3",text="Data edycji",anchor=tk.W)
 
-        tree.insert('', 'end', 'ID1', text='Demo', values=("Demo","demo"))
+        tree.insert('', 'end', 'ID1', text=testowe.name, values=(testowe.abbr,testowe.date))
         tree.pack()
         tree.place(x=44,y=251,height=633,width=382)
 
@@ -124,6 +140,7 @@ class MEDpress(object):
             width=14,
             height=2,
             bg="lightgrey",
+            command=self.getTextEntry
         )
         startbutton.pack()
         startbutton.place(x=840,y=201)
@@ -171,6 +188,29 @@ class MEDpress(object):
         backspacebutton.pack()
         backspacebutton.place(x=1175,y=839)
 
+    def getTextEntry(self):
+        textEntry=self.textfield.get("1.0", "end-1c")
+        print(textEntry)
+        self.templateSearch(textEntry)
+
+
+    def templateSearch(self,string):
+        found = None
+        for template in self.templateStack:
+            if string==template.abbr:
+                found=template
+        print(found.source)
+        self.initializeRender(found)
+
+    def initializeRender(self,object):
+        template = self.JinjaEnv.get_template(object.source)
+        self.druk = template.render(imie="Jan",nazwisko="Kowalski")
+        print(self.druk)
+        self.updateTextfield()
+
+    def updateTextfield(self):
+        self.textfield.delete('1.0', END)
+        self.textfield.insert(INSERT,self.druk)
     
     def hide(self):
         self.root.withdraw()
