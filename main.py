@@ -194,7 +194,7 @@ class MEDpress(object):
 
     def getTextEntry(self):
         textEntry=self.textfield.get("1.0", "end-1c")
-        print(textEntry)
+        #print(textEntry)
         self.templateSearch(textEntry)
 
 
@@ -239,23 +239,26 @@ class MEDpress(object):
         varlist = []
         template_source =self.JinjaEnv.loader.get_source(self.JinjaEnv, object.source)[0]
         parsed_content = self.JinjaEnv.parse(template_source)
-        varlist= meta.find_undeclared_variables(parsed_content)
+        varlist= list(meta.find_undeclared_variables(parsed_content))
         return varlist
 
 
-    def drawRequests(self, list):
+    def drawRequests(self, lista):
+        
+        lista.reverse()
+        
         vartext={}
         varentry={}
 
         verticalpos=300
 
-        for item in list:
+        for item in lista:
             x=0
             vartext[item] = "texfield{0}".format(x)
             varentry[item] = "entrybox{0}".format(x)
             x+=1
 
-        for item in list:
+        for item in lista:
             vartext[item] = tk.Label(
                 self.frame,
                 text="Zmienna "+str(item),
