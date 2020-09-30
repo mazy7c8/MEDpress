@@ -3,7 +3,7 @@ import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
 from createtmp import *
 from item import ListItem
-from jinja2 import Template, Environment, FileSystemLoader, select_autoescape
+from jinja2 import Template, Environment, FileSystemLoader, select_autoescape, meta
 
 class MEDpress(object):
     def __init__(self, parent):
@@ -12,6 +12,9 @@ class MEDpress(object):
         self.frame = tk.Frame(parent)
         self.frame.pack()
         self.root['bg']="#FCAFAF"
+
+        self.entryBoxList={}
+        self.found=ListItem
 
 
         self.JinjaEnv = Environment(
@@ -178,15 +181,16 @@ class MEDpress(object):
         progresslabel.pack()
         progresslabel.place(x=1020,y=850)
 
-        backspacebutton = tk.Button(
+        endworkbutton = tk.Button(
             self.frame,
-            text="Cofnij etap",
+            text="Zakończ",
             width=10,
             height=2,
             bg="lightgrey",
+            command=self.readWork
         )
-        backspacebutton.pack()
-        backspacebutton.place(x=1175,y=839)
+        endworkbutton.pack()
+        endworkbutton.place(x=1175,y=839)
 
     def getTextEntry(self):
         textEntry=self.textfield.get("1.0", "end-1c")
@@ -195,17 +199,17 @@ class MEDpress(object):
 
 
     def templateSearch(self,string):
-        found = None
         for template in self.templateStack:
             if string==template.abbr:
-                found=template
-        print(found.source)
-        self.initializeRender(found)
+                self.found=template
+        #print(found.source)
+        #self.initializeRender(found)
+        foundvars = self.getVariablesFromTemp(self.found)
+        self.entryBoxList = self.drawRequests(foundvars)
 
-    def initializeRender(self,object):
+    def initializeRender(self,object,dictonary):
         template = self.JinjaEnv.get_template(object.source)
-        self.druk = template.render(imie="Jan",nazwisko="Kowalski")
-        print(self.druk)
+        self.druk = template.render(dictonary)
         self.updateTextfield()
 
     def updateTextfield(self):
@@ -231,6 +235,54 @@ class MEDpress(object):
         self.root.update()
         self.root.deiconify()
         
+    def getVariablesFromTemp(self,object):
+        varlist = []
+        template_source =self.JinjaEnv.loader.get_source(self.JinjaEnv, object.source)[0]
+        parsed_content = self.JinjaEnv.parse(template_source)
+        varlist= meta.find_undeclared_variables(parsed_content)
+        return varlist
+
+
+    def drawRequests(self, list):
+        vartext={}
+        varentry={}
+
+        verticalpos=300
+
+        for item in list:
+            x=0
+            vartext[item] = "texfield{0}".format(x)
+            varentry[item] = "entrybox{0}".format(x)
+            x+=1
+
+        for item in list:
+            vartext[item] = tk.Label(
+                self.frame,
+                text="Zmienna "+str(item),
+                font=("Helvetica", 16),
+                bg=self.root['bg']
+                )
+            vartext[item].pack()
+            vartext[item].place(x=550,y=verticalpos,height=20,width=300)
+            
+            varentry[item]=tk.Entry(
+                self.frame,
+            )
+            varentry[item].pack()
+            varentry[item].place(x=550,y=verticalpos+20,height=20,width=300)
+
+
+            verticalpos+=100
+        
+        return varentry
+
+    def readWork(self):
+        readed={}
+        for keys in self.entryBoxList:
+            readed[keys]=self.entryBoxList[keys].get()
+        self.initializeRender(self.found,readed)
+            
+
 
     
 
