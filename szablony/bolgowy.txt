@@ -1,0 +1,1 @@
+Pacjenta {{ imie }} boli glowa w skali od 1 do 10 na {{ od1do10 }}

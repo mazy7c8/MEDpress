@@ -1,0 +1,1 @@
+Pacjent uderzył {{ czesc }} głowy o {{ miejsce }} i go boli

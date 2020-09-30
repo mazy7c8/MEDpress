@@ -1,1 +1,0 @@
-Pacjent {{ imie }} {{ nazwisko }} zlamal noge i umarl

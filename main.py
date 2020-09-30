@@ -2,7 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
 from createtmp import *
-from item import ListItem
+from item import ListItem, readFolder
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape, meta
 
 class MEDpress(object):
@@ -16,6 +16,12 @@ class MEDpress(object):
         self.entryBoxList={}
         self.found=ListItem
 
+
+        self.templateStack = []
+        datafromfolder = readFolder()
+        for source,name,time in datafromfolder:
+            testowe=ListItem(name,time,source)
+            self.templateStack.append(testowe)
 
         self.JinjaEnv = Environment(
             loader=FileSystemLoader('szablony'),
@@ -90,11 +96,6 @@ class MEDpress(object):
         Xbutton.pack()
         Xbutton.place(x=1250,y=44)
 
-        testowe=ListItem("Złamanie nogi","złamnog","szablon.txt")
-        self.templateStack = []
-        self.templateStack.append(testowe)
-        
-
         tree= ttk.Treeview()
         tree["columns"]=("COL2","COL3")
         tree.column("#0",width=100)
@@ -103,8 +104,10 @@ class MEDpress(object):
         tree.heading("COL2",text="Skrót",anchor=tk.W)
         tree.column("COL3",width=100)
         tree.heading("COL3",text="Data edycji",anchor=tk.W)
-
-        tree.insert('', 'end', 'ID1', text=testowe.name, values=(testowe.abbr,testowe.date))
+        number=0
+        for testowe in self.templateStack:
+            number += 1
+            tree.insert('', 'end', 'ID{0}'.format(number), text=testowe.name, values=(testowe.abbr,testowe.date))
         tree.pack()
         tree.place(x=44,y=251,height=633,width=382)
 
@@ -245,8 +248,8 @@ class MEDpress(object):
 
     def drawRequests(self, lista):
         
-        lista.reverse()
-        
+        #lista.reverse()
+
         vartext={}
         varentry={}
 
