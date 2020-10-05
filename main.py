@@ -92,24 +92,26 @@ class MEDpress(object):
             width=4,
             height=2,
             bg="lightgrey",
+            command = self.cleanTextfield
         )
         Xbutton.pack()
         Xbutton.place(x=1250,y=44)
 
-        tree= ttk.Treeview()
-        tree["columns"]=("COL2","COL3")
-        tree.column("#0",width=100)
-        tree.heading("#0",text="Nazwa",anchor=tk.W)
-        tree.column("COL2",width=100)
-        tree.heading("COL2",text="Skrót",anchor=tk.W)
-        tree.column("COL3",width=100)
-        tree.heading("COL3",text="Data edycji",anchor=tk.W)
+        self.tree= ttk.Treeview()
+        self.tree["columns"]=("COL2","COL3")
+        self.tree.column("#0",width=100)
+        self.tree.heading("#0",text="Nazwa",anchor=tk.W)
+        self.tree.column("COL2",width=100)
+        self.tree.heading("COL2",text="Skrót",anchor=tk.W)
+        self.tree.column("COL3",width=100)
+        self.tree.heading("COL3",text="Data edycji",anchor=tk.W)
         number=0
         for testowe in self.templateStack:
             number += 1
-            tree.insert('', 'end', 'ID{0}'.format(number), text=testowe.name, values=(testowe.abbr,testowe.date))
-        tree.pack()
-        tree.place(x=44,y=251,height=633,width=382)
+            self.tree.insert('', 'end', 'ID{0}'.format(number), text=testowe.name, values=(testowe.abbr,testowe.date))
+        self.tree.pack()
+        self.tree.place(x=44,y=251,height=633,width=382)
+        self.tree.bind('<ButtonRelease-1>',self.updateTextfieldFromClick)
 
         treelabel = tk.Label(
             self.frame,
@@ -218,6 +220,16 @@ class MEDpress(object):
     def updateTextfield(self):
         self.textfield.delete('1.0', END)
         self.textfield.insert(INSERT,self.druk)
+    
+    def cleanTextfield(self):
+        self.textfield.delete("1.0",END) 
+
+    def updateTextfieldFromClick(self, event):
+        selected = self.tree.item(self.tree.selection())['values'][0]
+        self.textfield.delete('1.0', END)
+        self.textfield.insert(INSERT,selected)
+
+
     
     def hide(self):
         self.root.withdraw()
