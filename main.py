@@ -4,12 +4,16 @@ from tkinter import Canvas, Frame, INSERT, END
 from createtmp import *
 from item import ListItem, readFolder
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape, meta
+import subprocess
 
 class MEDpress(object):
     def __init__(self, parent):
         self.root = parent
         self.root.title("Ekran Glowny")
         self.frame = tk.Frame(parent)
+        self.root.bind("<Control-s>",lambda event, : self.getTextEntry())
+        self.root.bind("<Control-z>",lambda event, : self.readWork())
+        self.root.bind("<Control-c>",lambda event, : self.copyToClipboard())
         self.frame.pack()
         self.root['bg']="#FCAFAF"
 
@@ -29,7 +33,6 @@ class MEDpress(object):
         )
 
         #template = self.JinjaEnv.get_template('szablon.txt')
-
         #druk = template.render(imie="Jan",nazwisko="Kowalski")
         
 
@@ -85,6 +88,15 @@ class MEDpress(object):
         )
         texfieldlabel.pack()
         texfieldlabel.place(x=713,y=17,height=20,width=379)
+
+        keyinfolabel = tk.Label(
+            self.frame,
+            text="Ctrl+s rozpocznij wypis | Ctrl+z zakoncz wypis | Ctrl+c do schowka",
+            font=("Helvetica", 12),
+            bg=self.root['bg']
+        )
+        keyinfolabel.pack()
+        keyinfolabel.place(x=0,y=17,height=20,width=379)
 
         Xbutton = tk.Button(
             self.frame,
@@ -159,6 +171,7 @@ class MEDpress(object):
             width=14,
             height=2,
             bg="lightgrey",
+            command = self.copyToClipboard
         )
         clipboardbutton.pack()
         clipboardbutton.place(x=998,y=201)
@@ -196,6 +209,11 @@ class MEDpress(object):
         )
         endworkbutton.pack()
         endworkbutton.place(x=1175,y=839)
+
+    def copyToClipboard(self):
+        textEntry=self.textfield.get("1.0", "end-1c")
+        cmd='echo '+textEntry.strip()+'|pbcopy'
+        return subprocess.check_call(cmd, shell=True)
 
     def getTextEntry(self):
         textEntry=self.textfield.get("1.0", "end-1c")
