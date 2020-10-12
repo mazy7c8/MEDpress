@@ -140,6 +140,7 @@ class MEDpress(object):
             width=14,
             height=1,
             bg="#DCE19C",
+            command=self.openFrame
         )
         editbutton.pack()
         editbutton.place(y=224,x=180)
