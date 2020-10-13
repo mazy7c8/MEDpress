@@ -3,7 +3,7 @@ import tkinter.ttk as ttk
 from tkinter import Canvas, Frame
 
 
-def template_window(self):
+def template_window(self,template):
     self.window = tk.Toplevel()
     self.window.geometry("868x712")
     self.window.title("Tworz szablony")
@@ -22,6 +22,7 @@ def template_window(self):
         bg='white',
     )
     titleentry.pack()
+    titleentry.insert(0,template.name)
     titleentry.place(x=36, y=64, height=30, width=226)
 
     abbrlabel = tk.Label(
@@ -37,6 +38,7 @@ def template_window(self):
         bg='white',
     )
     abbrentry.pack()
+    abbrentry.insert(0,template.abbr)
     abbrentry.place(x=320, y=64, height=30, width=226)
 
     authorlabel = tk.Label(

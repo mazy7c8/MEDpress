@@ -140,7 +140,7 @@ class MEDpress(object):
             width=14,
             height=1,
             bg="#DCE19C",
-            command=self.openFrame
+            command=self.openFrameWithTmp
         )
         editbutton.pack()
         editbutton.place(y=224,x=180)
@@ -255,7 +255,14 @@ class MEDpress(object):
         
     def openFrame(self):
         self.hide()
-        template_window(self)
+        template_window(self,None)
+
+    def openFrameWithTmp(self):
+        self.hide()
+        selected = self.tree.item(self.tree.selection())['values'][0]
+        print(selected)
+        self.templateSearch(selected)
+        template_window(self,self.found)
 
     def frameHandler(self, otherFrame):
         handler = lambda: self.onCloseOtherFrame(otherFrame)
