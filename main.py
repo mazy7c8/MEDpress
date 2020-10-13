@@ -213,8 +213,22 @@ class MEDpress(object):
 
     def copyToClipboard(self):
         textEntry=self.textfield.get("1.0", "end-1c")
-        cmd='echo '+textEntry.strip()+'|pbcopy'
-        return subprocess.check_call(cmd, shell=True)
+        try:
+            #MACOS
+            cmd='echo '+textEntry.strip()+'|pbcopy'
+        except Exception as e:
+            print(e)
+        try:
+            #WINDOWS
+            cmd='echo '+textEntry.strip()+'|clip'
+        except Exception as e:
+            print(e)
+        try:
+            #LINUX
+            cmd = 'echo ' + generated + ' | tr -d \'\\n\''
+            cmd = cmd + ' | xsel -i --clipboard'
+        finally:
+            return subprocess.check_call(cmd, shell=True)
 
     def getTextEntry(self):
         textEntry=self.textfield.get("1.0", "end-1c")
