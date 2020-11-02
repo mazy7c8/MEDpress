@@ -4,7 +4,9 @@ from tkinter import Canvas, Frame, INSERT, END
 from createtmp import *
 from item import ListItem, readFolder
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape, meta
+from jinja2schema import infer, model, config
 import subprocess
+import re
 
 class MEDpress(object):
     def __init__(self, parent):
@@ -232,7 +234,7 @@ class MEDpress(object):
             print(e)
         try:
             #LINUX
-            cmd = 'echo ' + generated + ' | tr -d \'\\n\''
+            cmd = 'echo ' + textEntry.strip() + ' | tr -d \'\\n\''
             cmd = cmd + ' | xsel -i --clipboard'
         finally:
             return subprocess.check_call(cmd, shell=True)
@@ -302,8 +304,12 @@ class MEDpress(object):
     def getVariablesFromTemp(self,object):
         varlist = []
         template_source =self.JinjaEnv.loader.get_source(self.JinjaEnv, object.source)[0]
-        parsed_content = self.JinjaEnv.parse(template_source)
-        varlist= list(meta.find_undeclared_variables(parsed_content))
+        #parsed_content = self.JinjaEnv.parse(template_source)
+        #varlist= list(meta.find_undeclared_variables(parsed_content))
+        config.Config(ORDER_NUMBER = False)
+        print(template_source)
+        costam = infer(template_source)
+        print (costam)
         return varlist
 
 
@@ -315,12 +321,13 @@ class MEDpress(object):
         varentry={}
 
         verticalpos=300
-
+        
+        x=0
         for item in lista:
-            x=0
             vartext[item] = "texfield{0}".format(x)
             varentry[item] = "entrybox{0}".format(x)
             x+=1
+
 
         for item in lista:
             vartext[item] = tk.Label(

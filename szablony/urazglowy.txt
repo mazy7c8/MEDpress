@@ -1,1 +1,1 @@
-Pacjent uderzył {{ czesc }} głowy o {{ miejsce }} i go boli
+Pacjent uderzył {{ czesc }}   {{aaaa}} głowy o {{ miejsce }} i go boli
