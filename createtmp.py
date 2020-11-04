@@ -118,12 +118,17 @@ def template_window(self,template):
         width=15,
         height=2,
         bg="lightgrey",
-        command=None
+        command=saveValues(self)
     )
     savebutton.pack()
     savebutton.place(x=600, y=630)
 
-    btn = tk.Button(self.window,
+    btn = tk.Button(
+        self.window,
         text="Close",
         command=self.frameHandler(self.window))
     btn.pack()
+
+def saveValues(self):
+    self.found.name = "blabla"
+

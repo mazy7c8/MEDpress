@@ -259,9 +259,11 @@ class MEDpress(object):
 
     def openFrameWithTmp(self):
         self.hide()
-        selected = self.tree.item(self.tree.selection())['values'][0]
-        print(selected)
-        self.templateSearch(selected)
+        try:
+            selected = self.tree.item(self.tree.selection())['values'][0]
+            self.templateSearch(selected)
+        except:
+            None
         template_window(self,self.found)
 
     def frameHandler(self, otherFrame):
@@ -270,6 +272,7 @@ class MEDpress(object):
 
     def onCloseOtherFrame(self, otherFrame):
         otherFrame.destroy()
+        self.tree.insert('', 'end', text=self.found.name, values=(self.found.abbr,self.found.date))
         self.show()
         
     def show(self):
