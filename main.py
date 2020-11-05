@@ -8,22 +8,22 @@ from jinja2schema import infer, model, config
 import subprocess
 import re
 
+
 class MEDpress(object):
     def __init__(self, parent):
         self.root = parent
         self.root.title("Ekran Glowny")
         self.frame = tk.Frame(parent)
         self.frame.pack()
-        self.root['bg']="#FCAFAF"
+        self.root['bg'] = "#FCAFAF"
 
-        self.entryBoxList={}
-        self.found=ListItem
-
+        self.entryBoxList = {}
+        self.found = ListItem
 
         self.templateStack = []
         datafromfolder = readFolder()
-        for source,name,time in datafromfolder:
-            testowe=ListItem(name,time,source)
+        for source, name, time in datafromfolder:
+            testowe = ListItem(name, time, source)
             self.templateStack.append(testowe)
 
         self.JinjaEnv = Environment(
@@ -33,10 +33,9 @@ class MEDpress(object):
 
         #template = self.JinjaEnv.get_template('szablon.txt')
         #druk = template.render(imie="Jan",nazwisko="Kowalski")
-        
 
-        canvas = Canvas(self.frame,width=1300,height=900,bg="#FCAFAF")
-        canvas.create_rectangle(492,260,1287,884,fill="#ED6868")
+        canvas = Canvas(self.frame, width=1300, height=900, bg="#FCAFAF")
+        canvas.create_rectangle(492, 260, 1287, 884, fill="#ED6868")
         canvas.pack()
 
         button1 = tk.Button(
@@ -48,9 +47,8 @@ class MEDpress(object):
             command=self.openFrame
         )
         button1.pack()
-        button1.place(y=44,x=79)
-        
-        
+        button1.place(y=44, x=79)
+
         button2 = tk.Button(
             self.frame,
             text="Wgraj z pliku",
@@ -59,7 +57,7 @@ class MEDpress(object):
             bg="#C0D9B7",
         )
         button2.pack()
-        button2.place(y=44,x=279)
+        button2.place(y=44, x=279)
 
         button3 = tk.Button(
             self.frame,
@@ -69,15 +67,15 @@ class MEDpress(object):
             bg="#B2D4DC",
         )
         button3.pack()
-        button3.place(y=44,x=479)
+        button3.place(y=44, x=479)
 
-        self.textfield=tk.Text(
+        self.textfield = tk.Text(
             self.frame,
             bg='white',
         )
         #textfield.insert(INSERT, druk)
         self.textfield.pack()
-        self.textfield.place(y=44,x=714,height=147,width=573)
+        self.textfield.place(y=44, x=714, height=147, width=573)
 
         texfieldlabel = tk.Label(
             self.frame,
@@ -86,7 +84,7 @@ class MEDpress(object):
             bg=self.root['bg']
         )
         texfieldlabel.pack()
-        texfieldlabel.place(x=713,y=17,height=20,width=379)
+        texfieldlabel.place(x=713, y=17, height=20, width=379)
 
         keyinfolabel = tk.Label(
             self.frame,
@@ -95,7 +93,7 @@ class MEDpress(object):
             bg=self.root['bg']
         )
         keyinfolabel.pack()
-        keyinfolabel.place(x=0,y=17,height=20,width=379)
+        keyinfolabel.place(x=0, y=17, height=20, width=379)
 
         Xbutton = tk.Button(
             self.frame,
@@ -103,26 +101,27 @@ class MEDpress(object):
             width=4,
             height=2,
             bg="lightgrey",
-            command = self.cleanTextfield
+            command=self.cleanTextfield
         )
         Xbutton.pack()
-        Xbutton.place(x=1250,y=44)
+        Xbutton.place(x=1250, y=44)
 
-        self.tree= ttk.Treeview()
-        self.tree["columns"]=("COL2","COL3")
-        self.tree.column("#0",width=100)
-        self.tree.heading("#0",text="Nazwa",anchor=tk.W)
-        self.tree.column("COL2",width=100)
-        self.tree.heading("COL2",text="Skrót",anchor=tk.W)
-        self.tree.column("COL3",width=100)
-        self.tree.heading("COL3",text="Data edycji",anchor=tk.W)
-        number=0
+        self.tree = ttk.Treeview()
+        self.tree["columns"] = ("COL2", "COL3")
+        self.tree.column("#0", width=100)
+        self.tree.heading("#0", text="Nazwa", anchor=tk.W)
+        self.tree.column("COL2", width=100)
+        self.tree.heading("COL2", text="Skrót", anchor=tk.W)
+        self.tree.column("COL3", width=100)
+        self.tree.heading("COL3", text="Data edycji", anchor=tk.W)
+        number = 0
         for testowe in self.templateStack:
             number += 1
-            self.tree.insert('', 'end', 'ID{0}'.format(number), text=testowe.name, values=(testowe.abbr,testowe.date))
+            self.tree.insert('', 'end', 'ID{0}'.format(
+                number), text=testowe.name, values=(testowe.abbr, testowe.date))
         self.tree.pack()
-        self.tree.place(x=44,y=251,height=633,width=382)
-        self.tree.bind('<ButtonRelease-1>',self.updateTextfieldFromClick)
+        self.tree.place(x=44, y=251, height=633, width=382)
+        self.tree.bind('<ButtonRelease-1>', self.updateTextfieldFromClick)
 
         treelabel = tk.Label(
             self.frame,
@@ -131,7 +130,7 @@ class MEDpress(object):
             bg=self.root['bg']
         )
         treelabel.pack()
-        treelabel.place(x=20,y=222,height=20,width=150)
+        treelabel.place(x=20, y=222, height=20, width=150)
 
         editbutton = tk.Button(
             self.frame,
@@ -142,7 +141,7 @@ class MEDpress(object):
             command=self.openFrameWithTmp
         )
         editbutton.pack()
-        editbutton.place(y=224,x=180)
+        editbutton.place(y=224, x=180)
 
         savebutton = tk.Button(
             self.frame,
@@ -152,7 +151,7 @@ class MEDpress(object):
             bg="#C0D9B7",
         )
         savebutton.pack()
-        savebutton.place(y=224,x=320)
+        savebutton.place(y=224, x=320)
 
         self.startbutton = tk.Button(
             self.frame,
@@ -164,7 +163,7 @@ class MEDpress(object):
             command=self.getTextEntry
         )
         self.startbutton.pack()
-        self.startbutton.place(x=840,y=201)
+        self.startbutton.place(x=840, y=201)
 
         self.clipboardbutton = tk.Button(
             self.frame,
@@ -173,11 +172,10 @@ class MEDpress(object):
             height=2,
             bg="lightgrey",
             activebackground='#00ff00',
-            command = self.copyToClipboard
+            command=self.copyToClipboard
         )
         self.clipboardbutton.pack()
-        self.clipboardbutton.place(x=998,y=201)
-
+        self.clipboardbutton.place(x=998, y=201)
 
         exportbutton = tk.Button(
             self.frame,
@@ -187,11 +185,12 @@ class MEDpress(object):
             bg="lightgrey",
         )
         exportbutton.pack()
-        exportbutton.place(x=1156,y=201)
-        progressbar= ttk.Progressbar(self.frame,orient="horizontal", length=500, mode="determinate")
+        exportbutton.place(x=1156, y=201)
+        progressbar = ttk.Progressbar(
+            self.frame, orient="horizontal", length=500, mode="determinate")
         progressbar.pack()
-        progressbar.place(x=511,y=853)
-        progressbar['value']=20
+        progressbar.place(x=511, y=853)
+        progressbar['value'] = 20
 
         progresslabel = tk.Label(
             self.frame,
@@ -200,7 +199,7 @@ class MEDpress(object):
             bg=("#ED6868")
         )
         progresslabel.pack()
-        progresslabel.place(x=1020,y=850)
+        progresslabel.place(x=1020, y=850)
 
         self.endworkbutton = tk.Button(
             self.frame,
@@ -212,75 +211,71 @@ class MEDpress(object):
             command=self.readWork
         )
         self.endworkbutton.pack()
-        self.endworkbutton.place(x=1175,y=839)
+        self.endworkbutton.place(x=1175, y=839)
 
-        self.root.bind("<Control-s>",lambda event, : self.getTextEntry())
-        self.root.bind("<Control-z>",lambda event, : self.readWork())
-        self.root.bind("<Control-c>",lambda event, : self.copyToClipboard())
+        self.root.bind("<Control-s>", lambda event, : self.getTextEntry())
+        self.root.bind("<Control-z>", lambda event, : self.readWork())
+        self.root.bind("<Control-c>", lambda event, : self.copyToClipboard())
 
     def copyToClipboard(self):
         self.clipboardbutton.config(bg="#00FF00")
-        root.after(100, lambda: self.clipboardbutton.config(bg = 'lightgrey'))
-        textEntry=self.textfield.get("1.0", "end-1c")
+        root.after(100, lambda: self.clipboardbutton.config(bg='lightgrey'))
+        textEntry = self.textfield.get("1.0", "end-1c")
         try:
-            #MACOS
-            cmd='echo '+textEntry.strip()+'|pbcopy'
+            # MACOS
+            cmd = 'echo '+textEntry.strip()+'|pbcopy'
         except Exception as e:
-            print(e)
-        try:
-            #WINDOWS
-            cmd='echo '+textEntry.strip()+'|clip'
-        except Exception as e:
-            print(e)
-        try:
-            #LINUX
-            cmd = 'echo ' + textEntry.strip() + ' | tr -d \'\\n\''
-            cmd = cmd + ' | xsel -i --clipboard'
+            pass
+            try:
+                # WINDOWS
+                cmd = 'echo '+textEntry.strip()+'|clip'
+            except Exception as e:
+                pass
+                try:
+                    # LINUX
+                    cmd = 'echo ' + textEntry.strip() + ' | tr -d \'\\n\''
+                    cmd = cmd + ' | xsel -i --clipboard'
+                except Exception as e:
+                    print("no os detected")
         finally:
             return subprocess.check_call(cmd, shell=True)
 
     def getTextEntry(self):
         self.startbutton.config(bg="#00FF00")
-        root.after(100, lambda: self.startbutton.config(bg = 'lightgrey'))
-        textEntry=self.textfield.get("1.0", "end-1c")
-        #print(textEntry)
+        root.after(100, lambda: self.startbutton.config(bg='lightgrey'))
+        textEntry = self.textfield.get("1.0", "end-1c")
         self.templateSearch(textEntry)
 
-
-    def templateSearch(self,string):
+    def templateSearch(self, string):
         for template in self.templateStack:
-            if string==template.abbr:
-                self.found=template
-        #print(found.source)
-        #self.initializeRender(found)
+            if string == template.abbr:
+                self.found = template
         foundvars = self.getVariablesFromTemp(self.found)
         self.entryBoxList = self.drawRequests(foundvars)
 
-    def initializeRender(self,object,dictonary):
+    def initializeRender(self, object, dictonary):
         template = self.JinjaEnv.get_template(object.source)
         self.druk = template.render(dictonary)
         self.updateTextfield()
 
     def updateTextfield(self):
         self.textfield.delete('1.0', END)
-        self.textfield.insert(INSERT,self.druk)
-    
+        self.textfield.insert(INSERT, self.druk)
+
     def cleanTextfield(self):
-        self.textfield.delete("1.0",END) 
+        self.textfield.delete("1.0", END)
 
     def updateTextfieldFromClick(self, event):
         selected = self.tree.item(self.tree.selection())['values'][0]
         self.textfield.delete('1.0', END)
-        self.textfield.insert(INSERT,selected)
+        self.textfield.insert(INSERT, selected)
 
-
-    
     def hide(self):
         self.root.withdraw()
-        
+
     def openFrame(self):
         self.hide()
-        template_window(self,None)
+        template_window(self, None)
 
     def openFrameWithTmp(self):
         self.hide()
@@ -289,48 +284,42 @@ class MEDpress(object):
             self.templateSearch(selected)
         except:
             None
-        template_window(self,self.found)
+        template_window(self, self.found)
 
     def frameHandler(self, otherFrame):
-        handler = lambda: self.onCloseOtherFrame(otherFrame)
+        def handler(): return self.onCloseOtherFrame(otherFrame)
         return handler
 
     def onCloseOtherFrame(self, otherFrame):
         otherFrame.destroy()
-        self.tree.insert('', 'end', text=self.found.name, values=(self.found.abbr,self.found.date))
+        self.tree.insert('', 'end', text=self.found.name,
+                         values=(self.found.abbr, self.found.date))
         self.show()
-        
+
     def show(self):
         self.root.update()
         self.root.deiconify()
-        
-    def getVariablesFromTemp(self,object):
+
+    def getVariablesFromTemp(self, object):
         varlist = []
-        template_source =self.JinjaEnv.loader.get_source(self.JinjaEnv, object.source)[0]
-        #parsed_content = self.JinjaEnv.parse(template_source)
-        #varlist= list(meta.find_undeclared_variables(parsed_content))
-        config.Config(ORDER_NUMBER = False)
-        print(template_source)
-        costam = infer(template_source)
-        print (costam)
+        template_source = self.JinjaEnv.loader.get_source(
+            self.JinjaEnv, object.source)[0]
+        parsed_content = self.JinjaEnv.parse(template_source)
+        varlist = list(meta.find_undeclared_variables(parsed_content))
         return varlist
 
-
     def drawRequests(self, lista):
-        
-        #lista.reverse()
 
-        vartext={}
-        varentry={}
+        vartext = {}
+        varentry = {}
 
-        verticalpos=300
-        
-        x=0
+        verticalpos = 300
+
+        x = 0
         for item in lista:
             vartext[item] = "texfield{0}".format(x)
             varentry[item] = "entrybox{0}".format(x)
-            x+=1
-
+            x += 1
 
         for item in lista:
             vartext[item] = tk.Label(
@@ -338,37 +327,31 @@ class MEDpress(object):
                 text="Zmienna "+str(item),
                 font=("Helvetica", 16),
                 bg=self.root['bg']
-                )
+            )
             vartext[item].pack()
-            vartext[item].place(x=550,y=verticalpos,height=20,width=300)
-            
-            varentry[item]=tk.Entry(
+            vartext[item].place(x=550, y=verticalpos, height=20, width=300)
+
+            varentry[item] = tk.Entry(
                 self.frame,
             )
             varentry[item].pack()
-            varentry[item].place(x=550,y=verticalpos+20,height=20,width=300)
+            varentry[item].place(x=550, y=verticalpos+20, height=20, width=300)
 
+            verticalpos += 100
 
-            verticalpos+=100
-        
         return varentry
 
     def readWork(self):
         self.endworkbutton.config(bg="#00FF00")
-        root.after(100, lambda: self.endworkbutton.config(bg = 'lightgrey'))
-        readed={}
+        root.after(100, lambda: self.endworkbutton.config(bg='lightgrey'))
+        readed = {}
         for keys in self.entryBoxList:
-            readed[keys]=self.entryBoxList[keys].get()
-        self.initializeRender(self.found,readed)
-    
-            
+            readed[keys] = self.entryBoxList[keys].get()
+        self.initializeRender(self.found, readed)
 
-
-    
 
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("1300x900")
     app = MEDpress(root)
     root.mainloop()
-
