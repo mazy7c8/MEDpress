@@ -4,7 +4,7 @@ import time
 
 class ListItem(object):
     def __init__(self,name,date,source):
-        self.name=name.strip(".txt")
+        self.name=name.rstrip(".txt")
         self.abbr=name[0:4]
         self.date=date
         self.source=name

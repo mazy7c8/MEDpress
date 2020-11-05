@@ -21,6 +21,7 @@ class MEDpress(object):
         self.found = ListItem
 
         self.templateStack = []
+
         datafromfolder = readFolder()
         for source, name, time in datafromfolder:
             testowe = ListItem(name, time, source)
@@ -141,7 +142,7 @@ class MEDpress(object):
             command=self.openFrameWithTmp
         )
         editbutton.pack()
-        editbutton.place(y=224, x=180)
+        editbutton.place(y=224, x=320)
 
         savebutton = tk.Button(
             self.frame,
@@ -151,7 +152,18 @@ class MEDpress(object):
             bg="#C0D9B7",
         )
         savebutton.pack()
-        savebutton.place(y=224, x=320)
+        savebutton.place(y=224, x=460)
+
+        refreshbutton = tk.Button(
+            self.frame,
+            text="Odswiez",
+            width=14,
+            height=1,
+            bg="#00ff00",
+            command=self.refreshTmpList
+        )
+        refreshbutton.pack()
+        refreshbutton.place(y=224, x=180)
 
         self.startbutton = tk.Button(
             self.frame,
@@ -245,6 +257,23 @@ class MEDpress(object):
         root.after(100, lambda: self.startbutton.config(bg='lightgrey'))
         textEntry = self.textfield.get("1.0", "end-1c")
         self.templateSearch(textEntry)
+
+    def refreshTmpList(self):
+        self.tree.delete(*self.tree.get_children())
+
+        self.templateStack.clear()
+
+        datafromfolder = readFolder()
+        for source, name, time in datafromfolder:
+            nowe = ListItem(name, time, source)
+            self.templateStack.append(nowe)
+        
+        number = 0
+        for cos in self.templateStack:
+            number += 1
+            self.tree.insert('', 'end', 'ID{0}'.format(
+                number), text=cos.name, values=(cos.abbr, cos.date))
+
 
     def templateSearch(self, string):
         for template in self.templateStack:
