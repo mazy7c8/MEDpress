@@ -2,11 +2,12 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
 from createtmp import *
-from item import ListItem, readFolder
+from item import ListItem, readFolder, readTemplate
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape, meta
 from jinja2schema import infer, model, config
 import subprocess
 import re
+import time
 
 
 class MEDpress(object):
@@ -176,6 +177,18 @@ class MEDpress(object):
         )
         self.startbutton.pack()
         self.startbutton.place(x=840, y=201)
+
+        self.startalternative = tk.Button(
+            self.frame,
+            text="Rozpocznij alt",
+            width=10,
+            height=2,
+            bg="lightgrey",
+            activebackground='#00ff00',
+            command=self.alternativeRender
+        )
+        self.startalternative.pack()
+        self.startalternative.place(x=720, y=201)
 
         self.clipboardbutton = tk.Button(
             self.frame,
@@ -377,6 +390,36 @@ class MEDpress(object):
         for keys in self.entryBoxList:
             readed[keys] = self.entryBoxList[keys].get()
         self.initializeRender(self.found, readed)
+
+    def alternativeRender(self):
+        textEntry = self.textfield.get("1.0", "end-1c")
+        
+        for template in self.templateStack:
+            if textEntry == template.abbr:
+                self.found = template
+        
+        data = readTemplate(self.found)
+
+        textlabel = tk.Label(
+            self.frame,
+            font=("Helvetica", 16),
+            bg=['#ED6868']
+        )
+        textlabel.pack()
+        textlabel.place(x=600, y=300)
+
+        
+        def go(counter=1):
+            textlabel.config(text=data[:counter])
+            root.after(10, lambda: go(counter+1))
+        go()
+          
+
+
+
+
+        
+
 
 
 if __name__ == "__main__":

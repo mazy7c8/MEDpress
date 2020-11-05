@@ -20,3 +20,8 @@ def readFolder():
 
     return data
 
+def readTemplate(template):
+    data = open(os.path.join("szablony",template.name+".txt"),"r")
+    return data.read()
+
+
