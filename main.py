@@ -23,6 +23,8 @@ class MEDpress(object):
 
         self.templateStack = []
 
+        self.dummyTemplate = ListItem('','','')
+
         datafromfolder = readFolder()
         for source, name, time in datafromfolder:
             testowe = ListItem(name, time, source)
@@ -317,7 +319,7 @@ class MEDpress(object):
 
     def openFrame(self):
         self.hide()
-        template_window(self, None)
+        template_window(self, self.dummyTemplate)
 
     def openFrameWithTmp(self):
         self.hide()
@@ -408,11 +410,18 @@ class MEDpress(object):
         textlabel.pack()
         textlabel.place(x=600, y=300)
 
-        
-        def go(counter=1):
-            textlabel.config(text=data[:counter])
+
+        counter=1
+        def go(counter):
+            text=data[:counter]
+            textlabel.config(text=text)
             root.after(10, lambda: go(counter+1))
-        go()
+            if "{" in text: stop()
+
+        def stop():
+            root.after(1000,lambda: go(counter))
+
+        go(counter)
           
 
 
