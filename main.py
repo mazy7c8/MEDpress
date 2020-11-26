@@ -1,3 +1,4 @@
+from subprocess import CalledProcessError
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
@@ -253,19 +254,24 @@ class MEDpress(object):
         try:
             # MACOS
             cmd = 'echo '+textEntry.strip()+'|pbcopy'
-        except Exception as e:
-            try:
-                # WINDOWS
-                cmd = 'echo '+textEntry.strip()+'|clip'
-            except Exception as e:
-                try:
-                    # LINUX
-                    cmd = 'echo ' + textEntry.strip() + ' | tr -d \'\\n\''
-                    cmd = cmd + ' | xsel -i --clipboard'
-                except Exception as e:
-                    print("no os detected")
-        finally:
             return subprocess.check_call(cmd, shell=True)
+        except:
+            print("no macos")
+        
+        try:
+            # WINDOWS
+            cmd = 'echo '+textEntry.strip()+'|clip'
+            return subprocess.check_call(cmd, shell=True)
+        except:
+            print("no windows")
+        
+        try:
+            # LINUX
+            cmd = 'echo ' + textEntry.strip() + ' | tr -d \'\\n\''
+            cmd = cmd + ' | xsel -i --clipboard'
+            return subprocess.check_call(cmd, shell=True)
+        except:
+            print("no linux")
 
     def getTextEntry(self):
         self.startbutton.config(bg="#00FF00")
