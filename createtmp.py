@@ -1,16 +1,16 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame
+from item import ListItem
 
-def saveValues(template):
-    template.name='blablax'
-    print('what')
 
 def template_window(self,template):
     self.window = tk.Toplevel()
     self.window.geometry("868x712")
     self.window.title("Tworz szablony")
     self.window['bg'] = ('#EFE3B8')
+
+   
 
     titlelabel = tk.Label(
         self.window,
@@ -27,6 +27,11 @@ def template_window(self,template):
     titleentry.pack()
     titleentry.insert(0,template.name)
     titleentry.place(x=36, y=64, height=30, width=226)
+
+    def saveValues():
+        value = titleentry.get()
+        ListItem.updateName(template,value)
+        print("updated")
 
     abbrlabel = tk.Label(
         self.window,
@@ -121,7 +126,7 @@ def template_window(self,template):
         width=15,
         height=2,
         bg="lightgrey",
-        command=saveValues(template)
+        command=saveValues
         )
     savebutton.pack()
     savebutton.place(x=600, y=630)
@@ -132,3 +137,5 @@ def template_window(self,template):
         command=self.frameHandler(self.window)
         )
     btn.pack()
+
+    

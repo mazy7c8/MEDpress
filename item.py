@@ -9,6 +9,9 @@ class ListItem(object):
         self.date=date
         self.source=name
 
+    def updateName(self,var):
+        os.rename(os.path.join("szablony",self.name+".txt"),os.path.join("szablony",var+".txt"))
+
 def readFolder():
     file_list = os.listdir("szablony")
     data=()
