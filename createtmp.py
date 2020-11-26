@@ -2,6 +2,9 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame
 
+def saveValues(template):
+    template.name='blablax'
+    print('what')
 
 def template_window(self,template):
     self.window = tk.Toplevel()
@@ -118,17 +121,14 @@ def template_window(self,template):
         width=15,
         height=2,
         bg="lightgrey",
-        command=saveValues(self)
-    )
+        command=saveValues(template)
+        )
     savebutton.pack()
     savebutton.place(x=600, y=630)
 
     btn = tk.Button(
         self.window,
         text="Close",
-        command=self.frameHandler(self.window))
+        command=self.frameHandler(self.window)
+        )
     btn.pack()
-
-def saveValues(self):
-    self.found.name = "blabla"
-

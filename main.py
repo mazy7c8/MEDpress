@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
-from createtmp import *
+from createtmp import template_window
 from item import ListItem, readFolder, readTemplate
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape, meta
 from jinja2schema import infer, model, config
@@ -24,6 +24,8 @@ class MEDpress(object):
         self.templateStack = []
 
         self.dummyTemplate = ListItem('','','')
+
+        self.actualDrawings = []
 
         datafromfolder = readFolder()
         for source, name, time in datafromfolder:
@@ -252,12 +254,10 @@ class MEDpress(object):
             # MACOS
             cmd = 'echo '+textEntry.strip()+'|pbcopy'
         except Exception as e:
-            pass
             try:
                 # WINDOWS
                 cmd = 'echo '+textEntry.strip()+'|clip'
             except Exception as e:
-                pass
                 try:
                     # LINUX
                     cmd = 'echo ' + textEntry.strip() + ' | tr -d \'\\n\''
@@ -288,8 +288,14 @@ class MEDpress(object):
             number += 1
             self.tree.insert('', 'end', 'ID{0}'.format(
                 number), text=cos.name, values=(cos.abbr, cos.date))
+        
+        self.clearWorkArea()
 
-
+    def clearWorkArea(self):
+        for drawing in self.actualDrawings:
+            drawing.destroy()
+        self.actualDrawings.clear()
+            
     def templateSearch(self, string):
         for template in self.templateStack:
             if string == template.abbr:
@@ -326,23 +332,26 @@ class MEDpress(object):
         try:
             selected = self.tree.item(self.tree.selection())['values'][0]
             self.templateSearch(selected)
+            template_window(self, self.found)
         except:
-            None
-        template_window(self, self.found)
-
+            template_window(self, self.dummyTemplate)
+        
     def frameHandler(self, otherFrame):
         def handler(): return self.onCloseOtherFrame(otherFrame)
         return handler
 
     def onCloseOtherFrame(self, otherFrame):
         otherFrame.destroy()
-        self.tree.insert('', 'end', text=self.found.name,
-                         values=(self.found.abbr, self.found.date))
         self.show()
+
+    def saveFromTempEdit(self, template):
+        self.tree.insert('', 'end', text=template.name, values=(template.abbr, template.date))  
 
     def show(self):
         self.root.update()
         self.root.deiconify()
+        self.refreshTmpList()
+        self.clearWorkArea()
 
     def getVariablesFromTemp(self, object):
         varlist = []
@@ -352,7 +361,7 @@ class MEDpress(object):
         varlist = list(meta.find_undeclared_variables(parsed_content))
         return varlist
 
-    def drawRequests(self, lista):
+    def drawRequests(self, lista, *argv):
 
         vartext = {}
         varentry = {}
@@ -374,12 +383,14 @@ class MEDpress(object):
             )
             vartext[item].pack()
             vartext[item].place(x=550, y=verticalpos, height=20, width=300)
+            self.actualDrawings.append(vartext[item])
 
             varentry[item] = tk.Entry(
                 self.frame,
             )
             varentry[item].pack()
             varentry[item].place(x=550, y=verticalpos+20, height=20, width=300)
+            self.actualDrawings.append(varentry[item])
 
             verticalpos += 100
 
