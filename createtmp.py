@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-from tkinter import Canvas, Frame
-from item import ListItem
+from tkinter import Canvas, Frame, INSERT
+from item import ListItem, readTemplate
 
 
 def template_window(self,template):
@@ -76,6 +76,9 @@ def template_window(self,template):
         self.window,
         bg='white',
     )
+    plaincode = readTemplate(template)
+    textcode.insert(INSERT,plaincode)
+
     textcode.pack()
     textcode.place(y=144, x=36, height=481, width=226)
 
