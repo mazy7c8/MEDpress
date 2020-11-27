@@ -1,6 +1,7 @@
 import datetime
 import os, os.path
 import time
+import re
 
 class ListItem(object):
     def __init__(self,name,date,source):
@@ -8,9 +9,31 @@ class ListItem(object):
         self.abbr=name[0:4]
         self.date=date
         self.source=name
+        self.author=None
 
     def updateName(self,var):
         os.rename(os.path.join("szablony",self.name+".txt"),os.path.join("szablony",var+".txt"))
+
+    def writeAuthor(self,var):
+        infoline="### author="+var
+        with open(os.path.join("szablony",self.name+".txt"),'r+') as f:
+            content = f.read()
+            f.seek(0, 0)
+            firstline = f.readline()
+            if firstline.startswith('###'):
+               firstline=re.sub('author=[a-z]*',"author="+var,firstline)
+               f.seek(0, 0)
+               f.readline()
+               content=f.read()
+               f.seek(0,0)
+               f.write(firstline + content)
+               f.close()
+            else:
+                print("puste")
+                f.seek(0, 0)
+                f.write(infoline.rstrip('\r\n') + '\n' + content)
+                f.close()
+
 
 def readFolder():
     file_list = os.listdir("szablony")
@@ -25,6 +48,7 @@ def readFolder():
 
 def readTemplate(template):
     data = open(os.path.join("szablony",template.name+".txt"),"r")
+    data.readline()
     return data.read()
 
 

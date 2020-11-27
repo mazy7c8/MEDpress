@@ -30,7 +30,9 @@ def template_window(self,template):
 
     def saveValues():
         value = titleentry.get()
+        value2 = authorentry.get()
         ListItem.updateName(template,value)
+        ListItem.writeAuthor(template,value2)
         print("updated")
 
     abbrlabel = tk.Label(
