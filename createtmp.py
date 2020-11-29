@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT
 from item import ListItem, readTemplate
+from jinja2schema import infer
 
 
 def template_window(self,template):
@@ -64,6 +65,9 @@ def template_window(self,template):
         bg='white',
     )
     authorentry.pack()
+    if template.author==None:
+        template.author=ListItem.readAuthor(template)
+    authorentry.insert(0,template.author)
     authorentry.place(x=600, y=64, height=30, width=226)
 
     codelabel = tk.Label(
@@ -97,6 +101,7 @@ def template_window(self,template):
         bg='white',
     )
     texttemplate.pack()
+    texttemplate.insert(INSERT,infer(plaincode))
     texttemplate.place(y=144, x=320, height=481, width=226)
 
     legendlabel = tk.Label(

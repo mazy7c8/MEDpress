@@ -14,6 +14,20 @@ class ListItem(object):
     def updateName(self,var):
         os.rename(os.path.join("szablony",self.name+".txt"),os.path.join("szablony",var+".txt"))
 
+    def readAuthor(self):
+        try:
+            with open(os.path.join("szablony",self.name+".txt"),'r+') as f:
+                content = f.read()
+                f.seek(0, 0)
+                firstline = f.readline()
+                if firstline.startswith('###'):
+                    firstline=re.search('author=(\w+)',firstline)
+                    #firstline.split("=")
+                return firstline.groups()
+        except:
+            return ("noname")
+        
+
     def writeAuthor(self,var):
         infoline="### author="+var
         with open(os.path.join("szablony",self.name+".txt"),'r+') as f:
@@ -48,7 +62,7 @@ def readFolder():
 
 def readTemplate(template):
     data = open(os.path.join("szablony",template.name+".txt"),"r")
-    data.readline()
+    #data.readline()
     return data.read()
 
 
