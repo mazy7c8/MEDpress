@@ -1,6 +1,7 @@
 from subprocess import CalledProcessError
 import tkinter as tk
 import tkinter.ttk as ttk
+import tkinter.font as tf
 from tkinter import Canvas, Frame, INSERT, END
 from createtmp import template_window
 from item import ListItem, readFolder, readTemplate
@@ -18,6 +19,10 @@ class MEDpress(object):
         self.frame = tk.Frame(parent)
         self.frame.pack()
         self.root['bg'] = "#FCAFAF"
+
+        def_font = tf.nametofont("TkDefaultFont")
+        def_font.configure(family='Georgia')
+        self.root.option_add("*Font",def_font)
 
         self.entryBoxList = {}
         self.found = ListItem
