@@ -61,8 +61,7 @@ def readFolder():
     return data
 
 def readTemplate(template):
-    data = open(os.path.join("szablony",template.name+".txt"),"r")
+    data = open(os.path.join("szablony",template.name+".txt"),"r",encoding="utf-8")
     #data.readline()
     return data.read()
-
 

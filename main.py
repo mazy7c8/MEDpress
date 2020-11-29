@@ -452,5 +452,6 @@ class MEDpress(object):
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("1300x900")
+    root.call('encoding', 'system', 'utf-8')
     app = MEDpress(root)
     root.mainloop()
