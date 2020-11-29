@@ -82,8 +82,11 @@ def template_window(self,template):
         self.window,
         bg='white',
     )
-    plaincode = readTemplate(template)
-    textcode.insert(INSERT,plaincode)
+    try:
+        plaincode = readTemplate(template)
+        textcode.insert(INSERT,plaincode)
+    except:
+        pass
 
     textcode.pack()
     textcode.place(y=144, x=36, height=481, width=226)
@@ -101,7 +104,10 @@ def template_window(self,template):
         bg='white',
     )
     texttemplate.pack()
-    texttemplate.insert(INSERT,infer(plaincode))
+    try:
+        texttemplate.insert(INSERT,infer(plaincode))
+    except: 
+        pass
     texttemplate.place(y=144, x=320, height=481, width=226)
 
     legendlabel = tk.Label(
