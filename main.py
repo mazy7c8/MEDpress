@@ -274,6 +274,7 @@ class MEDpress(object):
             print("no linux")
 
     def getTextEntry(self):
+        self.clearWorkArea()
         self.startbutton.config(bg="#00FF00")
         root.after(100, lambda: self.startbutton.config(bg='lightgrey'))
         textEntry = self.textfield.get("1.0", "end-1c")
