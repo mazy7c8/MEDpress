@@ -50,13 +50,18 @@ class MEDpress(object):
         canvas.create_rectangle(492, 260, 1287, 884, fill="#ED6868")
         canvas.pack()
 
+        def focus_next_widget(event):
+            event.widget.tk_focusNext().focus()
+            return("break")
+
         button1 = tk.Button(
             self.frame,
             text="Stwórz szablon",
             width=20,
             height=10,
             bg="#DCE19C",
-            command=self.openFrame
+            command=self.openFrame,
+            takefocus=0
         )
         button1.pack()
         button1.place(y=44, x=79)
@@ -67,6 +72,8 @@ class MEDpress(object):
             width=20,
             height=10,
             bg="#C0D9B7",
+            takefocus=0
+
         )
         button2.pack()
         button2.place(y=44, x=279)
@@ -77,6 +84,7 @@ class MEDpress(object):
             width=20,
             height=10,
             bg="#B2D4DC",
+            takefocus=0
         )
         button3.pack()
         button3.place(y=44, x=479)
@@ -88,6 +96,9 @@ class MEDpress(object):
         #textfield.insert(INSERT, druk)
         self.textfield.pack()
         self.textfield.place(y=44, x=714, height=147, width=573)
+        self.textfield.bind("<Tab>", focus_next_widget)
+        self.textfield.bind("<Return>", lambda event : self.getTextEntry())
+
 
         texfieldlabel = tk.Label(
             self.frame,
@@ -105,7 +116,7 @@ class MEDpress(object):
             bg=self.root['bg']
         )
         keyinfolabel.pack()
-        keyinfolabel.place(x=0, y=17, height=20, width=379)
+        keyinfolabel.place(x=0, y=17, height=20, width=320)
 
         Xbutton = tk.Button(
             self.frame,
@@ -113,12 +124,15 @@ class MEDpress(object):
             width=4,
             height=2,
             bg="lightgrey",
-            command=self.cleanTextfield
+            command=self.cleanTextfield,
+            takefocus=0
         )
         Xbutton.pack()
         Xbutton.place(x=1250, y=44)
 
-        self.tree = ttk.Treeview()
+        self.tree = ttk.Treeview(
+            takefocus=1
+            )
         self.tree["columns"] = ("COL2", "COL3")
         self.tree.column("#0", width=100)
         self.tree.heading("#0", text="Nazwa", anchor=tk.W)
@@ -134,6 +148,13 @@ class MEDpress(object):
         self.tree.pack()
         self.tree.place(x=44, y=251, height=633, width=382)
         self.tree.bind('<ButtonRelease-1>', self.updateTextfieldFromClick)
+        self.tree.bind('<Return>', self.updateTextfieldFromClick)
+        child_id = self.tree.get_children()[0]
+        self.tree.focus_set()
+        self.tree.focus(child_id)
+        self.tree.selection_set(child_id)
+
+
 
         treelabel = tk.Label(
             self.frame,
@@ -150,7 +171,8 @@ class MEDpress(object):
             width=14,
             height=1,
             bg="#DCE19C",
-            command=self.openFrameWithTmp
+            command=self.openFrameWithTmp,
+            takefocus=0
         )
         editbutton.pack()
         editbutton.place(y=224, x=320)
@@ -161,6 +183,7 @@ class MEDpress(object):
             width=14,
             height=1,
             bg="#C0D9B7",
+            takefocus=0
         )
         savebutton.pack()
         savebutton.place(y=224, x=460)
@@ -171,7 +194,8 @@ class MEDpress(object):
             width=14,
             height=1,
             bg="#00ff00",
-            command=self.refreshTmpList
+            command=self.refreshTmpList,
+            takefocus=0
         )
         refreshbutton.pack()
         refreshbutton.place(y=224, x=180)
@@ -183,22 +207,11 @@ class MEDpress(object):
             height=2,
             bg="lightgrey",
             activebackground='#00ff00',
-            command=self.getTextEntry
+            command=self.getTextEntry,
+            takefocus=1
         )
         self.startbutton.pack()
         self.startbutton.place(x=840, y=201)
-
-        self.startalternative = tk.Button(
-            self.frame,
-            text="Rozpocznij alt",
-            width=10,
-            height=2,
-            bg="lightgrey",
-            activebackground='#00ff00',
-            command=self.alternativeRender
-        )
-        self.startalternative.pack()
-        self.startalternative.place(x=720, y=201)
 
         self.clipboardbutton = tk.Button(
             self.frame,
@@ -207,7 +220,8 @@ class MEDpress(object):
             height=2,
             bg="lightgrey",
             activebackground='#00ff00',
-            command=self.copyToClipboard
+            command=self.copyToClipboard,
+            takefocus=0
         )
         self.clipboardbutton.pack()
         self.clipboardbutton.place(x=998, y=201)
@@ -218,6 +232,7 @@ class MEDpress(object):
             width=14,
             height=2,
             bg="lightgrey",
+            takefocus=0,
         )
         exportbutton.pack()
         exportbutton.place(x=1156, y=201)
@@ -243,7 +258,8 @@ class MEDpress(object):
             height=2,
             bg="lightgrey",
             activebackground='#00ff00',
-            command=self.readWork
+            command=self.readWork,
+            takefocus=1
         )
         self.endworkbutton.pack()
         self.endworkbutton.place(x=1175, y=839)
@@ -279,10 +295,10 @@ class MEDpress(object):
             print("no linux")
 
     def getTextEntry(self):
-        self.clearWorkArea()
         self.startbutton.config(bg="#00FF00")
         root.after(100, lambda: self.startbutton.config(bg='lightgrey'))
         textEntry = self.textfield.get("1.0", "end-1c")
+        textEntry= textEntry.rstrip()
         self.templateSearch(textEntry)
 
     def refreshTmpList(self):
@@ -302,6 +318,10 @@ class MEDpress(object):
                 number), text=cos.name, values=(cos.abbr, cos.date))
         
         self.clearWorkArea()
+        self.tree.focus_set()
+        self.tree.focus(self.tree.get_children()[0])
+        self.tree.selection_set(self.tree.get_children()[0])
+
 
     def clearWorkArea(self):
         for drawing in self.actualDrawings:
@@ -309,11 +329,14 @@ class MEDpress(object):
         self.actualDrawings.clear()
             
     def templateSearch(self, string):
+        self.clearWorkArea()
         for template in self.templateStack:
             if string == template.abbr:
                 self.found = template
-        foundvars = self.getVariablesFromTemp(self.found)
-        self.entryBoxList = self.drawRequests(foundvars)
+                foundvars = self.getVariablesFromTemp(self.found)
+                self.entryBoxList = self.drawRequests(foundvars)
+                self.endworkbutton.lift()
+                break
 
     def initializeRender(self, object, dictonary):
         template = self.JinjaEnv.get_template(object.source)
@@ -402,6 +425,7 @@ class MEDpress(object):
             )
             varentry[item].pack()
             varentry[item].place(x=550, y=verticalpos+20, height=20, width=300)
+            varentry[item].focus_set()
             self.actualDrawings.append(varentry[item])
 
             verticalpos += 100
