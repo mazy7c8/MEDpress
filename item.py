@@ -47,7 +47,12 @@ class ListItem(object):
                 f.seek(0, 0)
                 f.write(infoline.rstrip('\r\n') + '\n' + content)
                 f.close()
-
+    
+    def updateText(self,var):
+        with open(os.path.join("szablony",self.name+".txt"),'r+') as f:
+            f.truncate(0)
+            f.write(var)
+            f.close()
 
 def readFolder():
     file_list = os.listdir("szablony")

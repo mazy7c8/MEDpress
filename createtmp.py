@@ -1,6 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-from tkinter import Canvas, Frame, INSERT
+from tkinter import Canvas, Frame, INSERT, END
 from item import ListItem, readTemplate
 from jinja2schema import infer
 
@@ -10,6 +10,8 @@ def template_window(self,template):
     self.window.geometry("868x712")
     self.window.title("Tworz szablony")
     self.window['bg'] = ('#EFE3B8')
+
+    self.textaction=False
 
    
 
@@ -32,9 +34,16 @@ def template_window(self,template):
     def saveValues():
         value = titleentry.get()
         value2 = authorentry.get()
+        value3 = textcode.get(1.0,END)
         ListItem.updateName(template,value)
         ListItem.writeAuthor(template,value2)
+        if self.textaction==True: 
+            ListItem.updateText(template,value3)
+
         print("updated")
+
+    def textAction():
+        self.textaction=True
 
     abbrlabel = tk.Label(
         self.window,
@@ -109,7 +118,9 @@ def template_window(self,template):
     except: 
         pass
     texttemplate.place(y=144, x=320, height=481, width=226)
+    texttemplate.bind_all("<Key>", lambda event : textAction())
 
+    
     legendlabel = tk.Label(
         self.window,
         text="Legenda",
