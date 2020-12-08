@@ -116,7 +116,7 @@ class MEDpress(object):
             bg=self.root['bg']
         )
         keyinfolabel.pack()
-        keyinfolabel.place(x=0, y=17, height=20, width=320)
+        keyinfolabel.place(x=50, y=17, height=20, width=360)
 
         Xbutton = tk.Button(
             self.frame,
@@ -209,9 +209,12 @@ class MEDpress(object):
             activebackground='#00ff00',
             command=self.getTextEntry,
             takefocus=1
+
         )
         self.startbutton.pack()
         self.startbutton.place(x=840, y=201)
+        self.startbutton.bind("<Return>", lambda event : self.getTextEntry())
+
 
         self.clipboardbutton = tk.Button(
             self.frame,
@@ -262,7 +265,9 @@ class MEDpress(object):
             takefocus=1
         )
         self.endworkbutton.pack()
-        self.endworkbutton.place(x=1175, y=839)
+        self.endworkbutton.place(x=1175, y=839)        
+        self.endworkbutton.bind("<Return>", lambda event : self.readWork())
+
 
         self.root.bind("<Control-s>", lambda event, : self.getTextEntry())
         self.root.bind("<Control-z>", lambda event, : self.readWork())
