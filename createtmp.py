@@ -1,8 +1,11 @@
 import tkinter as tk
+from tkinter import font
+from tkinter.constants import LEFT
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
 from item import ListItem, readTemplate
-from jinja2schema import infer
+from jinja2schema import infer, to_json_schema
+import json
 
 
 def template_window(self,template):
@@ -14,6 +17,21 @@ def template_window(self,template):
     self.textaction=False
 
    
+
+    legend = """RC = przycisk wyboru typu
+radio jednokrotnego wyboru
+
+CB = przycisk typu combo
+multi wyboru
+
+SB = lista typu select
+
+IF = jeżeli prawda to
+
+DT = widżet daty
+
+NB = widżet liczby"""
+
 
     titlelabel = tk.Label(
         self.window,
@@ -114,7 +132,9 @@ def template_window(self,template):
     )
     texttemplate.pack()
     try:
-        texttemplate.insert(INSERT,infer(plaincode))
+        schema = infer(plaincode)
+        #schema = (json.dumps(schema,indent=3))
+        texttemplate.insert(INSERT,schema)
     except: 
         pass
     texttemplate.place(y=144, x=320, height=481, width=226)
@@ -129,12 +149,16 @@ def template_window(self,template):
     legendlabel.pack()
     legendlabel.place(x=600, y=120)
 
-    textlegend = tk.Text(
+    textlegend = tk.Label(
         self.window,
-        bg='white',
+        bg=self.window['bg'],
+        text=legend,
+        font=("Helvetica", 14),
+        justify=LEFT
     )
     textlegend.pack()
-    textlegend.place(y=144, x=600, height=481, width=226)
+    textlegend.place(y=144, x=600)
+    #textlegend.insert(INSERT, legend)
 
     generatebutton = tk.Button(
         self.window,
