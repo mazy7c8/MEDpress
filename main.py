@@ -12,13 +12,14 @@ import re
 import time
 import win32api
 
-class MEDpress(object):
+class MEDpress(object):        
     def __init__(self, parent):
         self.root = parent
         self.root.title("Ekran Glowny")
         self.frame = tk.Frame(parent)
         self.frame.pack()
         self.root['bg'] = "#FCAFAF"
+        self.root.protocol("WM_DELETE_WINDOW", self.root.quit())
 
         def_font = tf.nametofont("TkDefaultFont")
         def_font.configure(family='Georgia')

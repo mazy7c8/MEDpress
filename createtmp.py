@@ -13,6 +13,8 @@ def template_window(self,template):
     self.window.geometry("868x712")
     self.window.title("Tworz szablony")
     self.window['bg'] = ('#EFE3B8')
+    self.window.protocol("WM_DELETE_WINDOW", self.frameHandler(self.window))
+    #self.window.protocol("WM_DELETE_WINDOW", self.window.destroy())
 
     self.textaction=False
 
