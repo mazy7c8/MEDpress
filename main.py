@@ -2,7 +2,7 @@ from subprocess import CalledProcessError
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.font as tf
-from tkinter import Canvas, Frame, INSERT, END
+from tkinter import Canvas, Event, Frame, INSERT, END
 from createtmp import template_window
 from item import ListItem, readFolder, readTemplate
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape, meta
@@ -10,7 +10,7 @@ from jinja2schema import infer, model, config
 import subprocess
 import re
 import time
-
+import win32api
 
 class MEDpress(object):
     def __init__(self, parent):
@@ -484,6 +484,8 @@ class MEDpress(object):
 
 
 if __name__ == "__main__":
+    try: win32api.LoadKeyboardLayout('00000409',1)
+    except: pass
     root = tk.Tk()
     root.geometry("1300x900")
     root.call('encoding', 'system', 'utf-8')
