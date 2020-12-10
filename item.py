@@ -49,7 +49,7 @@ class ListItem(object):
                 f.close()
     
     def updateText(self,var):
-        with open(os.path.join("szablony",self.name+".txt"),'r+') as f:
+        with open(os.path.join("szablony",self.name+".txt"),'r+',encoding="utf-8") as f:
             f.truncate(0)
             f.write(var)
             f.close()
