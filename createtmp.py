@@ -17,8 +17,7 @@ def template_window(self,template):
     #self.window.protocol("WM_DELETE_WINDOW", self.window.destroy())
 
     self.textaction=False
-
-   
+    self.varaction=False
 
     legend = """RC = przycisk wyboru typu
 radio jednokrotnego wyboru
@@ -60,10 +59,17 @@ NB = widżet liczby"""
         if self.textaction==True: 
             ListItem.updateText(template,value3)
 
+        if self.varaction==True:
+            print("zmieniono zmienne")
+
+
         print("updated")
 
     def textAction():
         self.textaction=True
+
+    def varAction():
+        self.varaction=True
 
     abbrlabel = tk.Label(
         self.window,
@@ -119,6 +125,7 @@ NB = widżet liczby"""
 
     textcode.pack()
     textcode.place(y=144, x=36, height=481, width=226)
+    textcode.bind_all("<Key>", lambda event : textAction())
 
     templatelabel = tk.Label(
         self.window,
@@ -140,7 +147,8 @@ NB = widżet liczby"""
     except: 
         pass
     texttemplate.place(y=144, x=320, height=481, width=226)
-    texttemplate.bind_all("<Key>", lambda event : textAction())
+    texttemplate.bind_all("<Key>", lambda event : varAction())
+
 
     
     legendlabel = tk.Label(
