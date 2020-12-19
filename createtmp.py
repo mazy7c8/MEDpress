@@ -19,7 +19,10 @@ def template_window(self,template):
     self.textaction=False
     self.varaction=False
 
-    legend = """RC = przycisk wyboru typu
+    legend = """TX = standardowa
+zmienna tekstowa
+
+RC = przycisk wyboru typu
 radio jednokrotnego wyboru
 
 CB = przycisk typu combo
@@ -143,7 +146,11 @@ NB = widżet liczby"""
     try:
         schema = infer(plaincode)
         #schema = (json.dumps(schema,indent=3))
+        for item in schema.keys():
+            schema.__setitem__(item,"TX")
+
         texttemplate.insert(INSERT,schema)
+
     except: 
         pass
     texttemplate.place(y=144, x=320, height=481, width=226)

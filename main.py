@@ -10,7 +10,9 @@ from jinja2schema import infer, model, config
 import subprocess
 import re
 import time
-import win32api
+try: import win32api 
+except ImportError as e:
+    print(e)
 
 class MEDpress(object):        
     def __init__(self, parent):
