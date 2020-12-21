@@ -4,7 +4,6 @@ from tkinter.constants import LEFT
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
 from item import ListItem, readTemplate
-from jinja2schema import infer, to_json_schema
 import json
 
 
@@ -56,17 +55,17 @@ NB = widżet liczby"""
     def saveValues():
         value = titleentry.get()
         value2 = authorentry.get()
-        value3 = textcode.get(1.0,END)
+        value3 = textcode.get(1.0,END) #TODO  wprowadzanie autora noname na etapie czytania + metody do pamieci
+        value4 = texttemplate.get(1.0,END)
         ListItem.updateName(template,value)
         ListItem.writeAuthor(template,value2)
         if self.textaction==True: 
             ListItem.updateText(template,value3)
+            print("textaction")
 
         if self.varaction==True:
-            print("zmieniono zmienne")
-
-
-        print("updated")
+            ListItem.writeVars(template,value4,value2)
+            print("varaction")
 
     def textAction():
         self.textaction=True
@@ -128,7 +127,7 @@ NB = widżet liczby"""
 
     textcode.pack()
     textcode.place(y=144, x=36, height=481, width=226)
-    textcode.bind_all("<Key>", lambda event : textAction())
+    textcode.bind("<Key>", lambda event : textAction())
 
     templatelabel = tk.Label(
         self.window,
@@ -142,19 +141,15 @@ NB = widżet liczby"""
         self.window,
         bg='white',
     )
-    texttemplate.pack()
     try:
-        schema = infer(plaincode)
-        #schema = (json.dumps(schema,indent=3))
-        for item in schema.keys():
-            schema.__setitem__(item,"TX")
-
-        texttemplate.insert(INSERT,schema)
+        texttemplate.insert(INSERT,template.dictionary)
 
     except: 
         pass
+
+    texttemplate.pack()
     texttemplate.place(y=144, x=320, height=481, width=226)
-    texttemplate.bind_all("<Key>", lambda event : varAction())
+    texttemplate.bind("<Key>", lambda event : varAction())
 
 
     

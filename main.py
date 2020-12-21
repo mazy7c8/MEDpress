@@ -312,12 +312,13 @@ class MEDpress(object):
     def refreshTmpList(self):
         self.tree.delete(*self.tree.get_children())
 
-        self.templateStack.clear()
+        #self.templateStack.clear()
 
         datafromfolder = readFolder()
-        for source, name, time in datafromfolder:
-            nowe = ListItem(name, time, source)
-            self.templateStack.append(nowe)
+        result = zip(datafromfolder,self.templateStack)
+        for data, instance in list(result):
+            instance.updateInstance(data[1], data[2], data[0])
+            #self.templateStack.append(nowe)
         
         number = 0
         for cos in self.templateStack:
@@ -342,7 +343,7 @@ class MEDpress(object):
             if string == template.abbr:
                 self.found = template
                 foundvars = self.getVariablesFromTemp(self.found)
-                self.entryBoxList = self.drawRequests(foundvars)
+                self.entryBoxList = self.drawRequests(foundvars,template)
                 self.endworkbutton.lift()
                 break
 
@@ -404,7 +405,7 @@ class MEDpress(object):
         varlist = list(meta.find_undeclared_variables(parsed_content))
         return varlist
 
-    def drawRequests(self, lista, *argv):
+    def drawRequests(self, lista, template):
 
         vartext = {}
         varentry = {}
@@ -420,7 +421,7 @@ class MEDpress(object):
         for item in lista:
             vartext[item] = tk.Label(
                 self.frame,
-                text="Zmienna "+str(item),
+                text="Zmienna "+str(item)+" typu:"+str(template.dictionary[item]),
                 font=("Helvetica", 16),
                 bg=self.root['bg']
             )
