@@ -84,7 +84,7 @@ class ListItem(object):
             f.close()
 
     def writeVars(self,vars,aut):
-        self.dictionary = vars
+        self.dictionary = ast.literal_eval(vars)
         varline=str(vars)
         varline=varline.strip('\n')
         varline=varline.strip('\r')
