@@ -55,10 +55,8 @@ NB = widżet liczby"""
     def saveValues():
         value = titleentry.get()
         value2 = authorentry.get()
-        value3 = textcode.get(1.0,END) #TODO  wprowadzanie autora noname na etapie czytania + metody do pamieci
+        value3 = textcode.get(1.0,END)
         value4 = texttemplate.get(1.0,END)
-        ListItem.updateName(template,value)
-        ListItem.writeAuthor(template,value2)
         if self.textaction==True: 
             ListItem.updateText(template,value3)
             print("textaction")
@@ -66,6 +64,9 @@ NB = widżet liczby"""
         if self.varaction==True:
             ListItem.writeVars(template,value4,value2)
             print("varaction")
+
+        ListItem.updateName(template,value)
+        ListItem.writeAuthor(template,value2)
 
     def textAction():
         self.textaction=True
@@ -102,8 +103,8 @@ NB = widżet liczby"""
         bg='white',
     )
     authorentry.pack()
-    if template.author==None:
-        template.author=ListItem.readAuthor(template)
+    #if template.author==None:
+        #template.author=ListItem.readAuthor(template)
     authorentry.insert(0,template.author)
     authorentry.place(x=600, y=64, height=30, width=226)
 

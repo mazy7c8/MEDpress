@@ -11,7 +11,7 @@ class ListItem(object):
         self.abbr=name[0:4]
         self.date=date
         self.source=name
-        self.author=None
+        self.author=self.readAuthor()
         self.dictionary=self.makeDict(self.name)
 
     def updateInstance(self,name,date,source):
@@ -49,22 +49,24 @@ class ListItem(object):
                 content = f.read()
                 f.seek(0, 0)
                 firstline = f.readline()
+                f.close()
                 if firstline.startswith('###'):
                     firstline=re.search('author=(\w+)',firstline)
                     #firstline.split("=")
                 return firstline.groups()
         except:
-            return ("noname")
+            return ("nieznany")
         
 
     def writeAuthor(self,var):
+        self.author=var
         infoline="### author="+var
         with open(os.path.join("szablony",self.name+".txt"),'r+') as f:
             content = f.read()
             f.seek(0, 0)
             firstline = f.readline()
             if firstline.startswith('###'):
-               firstline=re.sub('author=[a-z]*',"author="+var,firstline)
+               firstline=re.sub('author=[a-z]*',"author="+self.author,firstline)
                f.seek(0, 0)
                f.readline()
                content=f.read()

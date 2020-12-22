@@ -10,6 +10,7 @@ from jinja2schema import infer, model, config
 import subprocess
 import re
 import time
+from draw import vardrawing
 try: import win32api 
 except ImportError as e:
     print(e)
@@ -407,37 +408,55 @@ class MEDpress(object):
 
     def drawRequests(self, lista, template):
 
-        vartext = {}
-        varentry = {}
+        # vartext = {}
+        # varentry = {}
 
+        drawing = {}
         verticalpos = 300
+        horizontalpos = 550
 
-        x = 0
+        # x = 0
+        # for item in lista:
+        #     vartext[item] = "texfield{0}".format(x)
+        #     varentry[item] = "entrybox{0}".format(x)
+        #     x += 1
+
         for item in lista:
-            vartext[item] = "texfield{0}".format(x)
-            varentry[item] = "entrybox{0}".format(x)
-            x += 1
+            drawing[item]=vardrawing(item,self.frame,template.dictionary[item],horizontalpos,verticalpos,template.dictionary)
+            verticalpos+=100
 
+        listofbodies = {}
         for item in lista:
-            vartext[item] = tk.Label(
-                self.frame,
-                text="Zmienna "+str(item)+" typu:"+str(template.dictionary[item]),
-                font=("Helvetica", 16),
-                bg=self.root['bg']
-            )
-            vartext[item].pack()
-            vartext[item].place(x=550, y=verticalpos, height=20, width=300)
-            self.actualDrawings.append(vartext[item])
+            heading = drawing[item].drawheading()
+            self.actualDrawings.append(heading)
 
-            varentry[item] = tk.Entry(
-                self.frame,
-            )
-            varentry[item].pack()
-            varentry[item].place(x=550, y=verticalpos+20, height=20, width=300)
-            varentry[item].focus_set()
-            self.actualDrawings.append(varentry[item])
+            body = drawing[item].drawbody()
+            self.actualDrawings.append(body)
 
-            verticalpos += 100
+            listofbodies[item]=body
+
+        varentry = listofbodies
+            
+        # for item in lista:
+        #     vartext[item] = tk.Label(
+        #         self.frame,
+        #         text="Zmienna "+str(item)+" typu:"+str(template.dictionary[item]),
+        #         font=("Helvetica", 16),
+        #         bg=self.root['bg']
+        #     )
+        #     vartext[item].pack()
+        #     vartext[item].place(x=550, y=verticalpos, height=20, width=300)
+        #     self.actualDrawings.append(vartext[item])
+
+        #     varentry[item] = tk.Entry(
+        #         self.frame,
+        #     )
+        #     varentry[item].pack()
+        #     varentry[item].place(x=550, y=verticalpos+20, height=20, width=300)
+        #     varentry[item].focus_set()
+        #     self.actualDrawings.append(varentry[item])
+
+        #     verticalpos += 100
 
         return varentry
 
@@ -446,7 +465,9 @@ class MEDpress(object):
         root.after(100, lambda: self.endworkbutton.config(bg='lightgrey'))
         readed = {}
         for keys in self.entryBoxList:
-            readed[keys] = self.entryBoxList[keys].get()
+            try: readed[keys] = self.entryBoxList[keys].get()
+            except AttributeError:
+                readed[keys]="#$@%*!"
         self.initializeRender(self.found, readed)
 
     def alternativeRender(self):
