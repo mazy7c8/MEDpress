@@ -4,10 +4,11 @@ class vardrawing(tk.Widget):
     def __init__(self,name,window,vartype,posx,posy,*args):
         self.name=name
         self.window=window
-        self.vartype=vartype
+        if type(vartype)==list: self.vartype=vartype[0]
+        else: self.vartype=vartype
         self.posx=posx
         self.posy=posy
-        self.extra=list(args)
+        self.extra=vartype[1:]
 
 
     def drawheading(self):
@@ -32,7 +33,26 @@ class vardrawing(tk.Widget):
             body.place(x=self.posx, y=self.posy+20, height=20, width=300)
             body.focus_set()
 
-            return body
+            return body, body
+
+        if self.vartype=="RC":
+            var = tk.StringVar()
+            bodies=[]
+            for option in self.extra:
+                self.posy+=20
+                body = tk.Radiobutton(
+                    self.window,
+                    text=option,
+                    variable=var,
+                    value=option
+                )
+                body.pack()
+                body.place(x=self.posx, y=self.posy, height=20, width=300)
+                body.focus_set()
+                #body.destroy()]
+                bodies.append(body)
+
+            return var, bodies
         
         else:
             body = tk.Label(

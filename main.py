@@ -335,7 +335,21 @@ class MEDpress(object):
 
     def clearWorkArea(self):
         for drawing in self.actualDrawings:
-            drawing.destroy()
+            if type(drawing)==list:
+                for draw in drawing:
+                    try: 
+                        draw.destroy()
+                    except:
+                        pass
+                    try: 
+                        draw.grid_forget()
+                    except:
+                        pass
+                
+            try: 
+                drawing.destroy()
+            except:
+                pass
         self.actualDrawings.clear()
             
     def templateSearch(self, string):
@@ -430,9 +444,9 @@ class MEDpress(object):
             heading = drawing[item].drawheading()
             self.actualDrawings.append(heading)
 
-            body = drawing[item].drawbody()
-            self.actualDrawings.append(body)
-
+            body, bodies = drawing[item].drawbody()
+            self.actualDrawings.append(bodies)
+            
             listofbodies[item]=body
 
         varentry = listofbodies
