@@ -54,6 +54,33 @@ class vardrawing(tk.Widget):
 
             return var, bodies
         
+        if self.vartype=="CB":
+            bodies=[]
+            allvars=[]
+            for option in self.extra:
+                var = tk.StringVar()
+                self.posy+=20
+                body = tk.Checkbutton(
+                    self.window,
+                    text=option,
+                    variable=var,
+                    onvalue=option,
+                    offvalue=''
+                )
+                body.pack()
+                body.place(x=self.posx, y=self.posy, height=20, width=300)
+                body.focus_set()
+
+                allvars.append(var)
+                #body.destroy()]
+                bodies.append(body)
+            
+
+            
+            return allvars, bodies
+
+
+        
         else:
             body = tk.Label(
                 self.window,
@@ -64,6 +91,7 @@ class vardrawing(tk.Widget):
             body.pack()
             body.place(x=self.posx, y=self.posy+20, height=20, width=300)
             return body
+        
             
 
 
