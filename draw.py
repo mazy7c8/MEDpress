@@ -1,7 +1,7 @@
 import tkinter as tk
 
 class vardrawing(tk.Widget):
-    def __init__(self,name,window,vartype,posx,posy,*args):
+    def __init__(self,name,window,vartype,posx,posy,tmpdict):
         self.name=name
         self.window=window
         if type(vartype)==list: self.vartype=vartype[0]
@@ -9,6 +9,11 @@ class vardrawing(tk.Widget):
         self.posx=posx
         self.posy=posy
         self.extra=vartype[1:]
+        self.tmpdict=tmpdict
+
+        if vartype=="if":
+            self.vartype=tmpdict[name][0]
+            self.extra=tmpdict[name][1:]
 
 
     def drawheading(self):
@@ -92,6 +97,78 @@ class vardrawing(tk.Widget):
         
             return body, body
 
+        if self.vartype=="IF":
+            bodies=[]
+            extravals=[]
+
+            def returnDrawing():
+                new = vardrawing(self.extra[1],self.window,"if",self.posx+400,self.posy-40,self.tmpdict)
+                
+                heading = new.drawheading()
+
+                newvals, newbodies = new.drawbody()
+
+                bodies.append(heading)
+                bodies.append(newbodies)
+                bodies.append(newvals)
+
+                if new.vartype=="CB": 
+                    extravals.extend(newvals)
+                    bodies.extend(newbodies)
+                else:
+                    extravals.append(newvals)
+
+                
+            
+            def destroyBodies():
+                for body in bodies[3:]:
+                    if type(body)==list:
+                        for draw in body:
+                            try: 
+                                draw.destroy()
+                            except:
+                                pass
+                    else: 
+                        body.destroy()
+                #extravals.clear()
+
+                
+
+            self.posy+=20
+
+            question = tk.Label(
+                    self.window,
+                    text=self.extra[0],
+                    font=("Helvetica", 16),
+                    bg='yellow'
+                )
+            question.pack()
+            question.place(x=self.posx, y=self.posy, height=20, width=300)
+            bodies.append(question)
+
+            self.posy+=20
+            body = tk.Button(
+                    self.window,
+                    text="Tak",
+                    command=returnDrawing,
+                )
+            body.pack()
+            body.place(x=self.posx, y=self.posy, height=20, width=150)
+            bodies.append(body)
+            
+            body2 = tk.Button(
+                    self.window,
+                    text="Nie",
+                    command=destroyBodies,
+                )
+            body2.pack()
+            body2.place(x=self.posx+150, y=self.posy, height=20, width=150)
+            bodies.append(body2)
+
+
+
+            return extravals, bodies
+
 
         
         else:
@@ -103,7 +180,7 @@ class vardrawing(tk.Widget):
             )
             body.pack()
             body.place(x=self.posx, y=self.posy+20, height=20, width=300)
-            return body
+            return body, body
         
             
 

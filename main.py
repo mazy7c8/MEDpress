@@ -341,11 +341,6 @@ class MEDpress(object):
                         draw.destroy()
                     except:
                         pass
-                    try: 
-                        draw.grid_forget()
-                    except:
-                        pass
-                
             try: 
                 drawing.destroy()
             except:
@@ -522,14 +517,14 @@ class MEDpress(object):
             root.after(1000,lambda: go(counter))
 
         go(counter)
+
+
           
 
 
 
 
         
-
-
 
 if __name__ == "__main__":
     try: win32api.LoadKeyboardLayout('00000409',1)
