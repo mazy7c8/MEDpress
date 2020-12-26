@@ -79,6 +79,19 @@ class vardrawing(tk.Widget):
             
             return allvars, bodies
 
+        if self.vartype=="SB":
+            self.posy+=20
+            body = tk.ttk.Combobox(
+                    self.window,
+                    values=self.extra,  
+                    state="readonly"    
+                )
+            body.pack()
+            body.place(x=self.posx, y=self.posy, height=20, width=300)
+            body.focus_set()
+        
+            return body, body
+
 
         
         else:
