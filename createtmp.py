@@ -21,15 +21,17 @@ def template_window(self,template):
     legend = """TX = standardowa
 zmienna tekstowa
 
-RC = przycisk wyboru typu
+RC = przyciski wyboru typu
 radio jednokrotnego wyboru
 
-CB = przycisk typu combo
+CB = przyciski typu combo
 multi wyboru
 
-SB = lista typu select
+SB = lista typu wybierz jedno
 
-IF = jeżeli prawda to
+IF = jezeli tak to zmienna
+
+TN = pytanie, prawda, falsz
 
 DT = widżet daty
 

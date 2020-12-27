@@ -1,3 +1,5 @@
-### author=nieznany {'imie': ['IF', 'czy jesz bigos', 'ifowa'], 'od1do10': ['CB', 'opcja3', 'opcja4', 'opcja5'], 'ifowa': ['TX', 'dasda', 'dasda2']}
+### author=nieznany {'imie': ['IF', 'czy jesz bigos', 'ifowa'], 'od1do10': ['TX', 'lubisz pierogi', 'tak lubie', 'nie lubie'], 'ifowa': ['TX', 'dasda', 'dasda2']}
 
 Pacjenta {{ imie }} boli glowa w skali od 1 do 10 na {{ od1do10 }}
+
+

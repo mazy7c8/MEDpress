@@ -37,6 +37,7 @@ class vardrawing(tk.Widget):
             body.pack()
             body.place(x=self.posx, y=self.posy+20, height=20, width=300)
             body.focus_set()
+            self.posy+=20
 
             return body, body
 
@@ -177,6 +178,82 @@ class vardrawing(tk.Widget):
 
 
             return extravals, bodies
+
+        
+        if self.vartype=="TN":
+            bodies=[]
+            extravals=[]
+
+            var = tk.StringVar()
+            var.set(self.extra[1])
+
+            varFalse = tk.StringVar()
+            varFalse.set(self.extra[2])
+
+            def destroyVars():
+                extravals.clear()
+                for body in bodies[3:]:
+                    body.destroy()
+
+
+            def returnPositive():
+                extravals.clear()
+                extravals.append(var)
+                body3 = tk.Button(
+                        self.window,
+                        text="zrezygnuj",
+                        command=destroyVars,
+                    )
+                body3.pack()
+                body3.place(x=self.posx, y=self.posy+20, height=20, width=300)
+                bodies.append(body3)
+
+            def returnNegative():
+                extravals.clear()
+                extravals.append(varFalse)
+                body3 = tk.Button(
+                        self.window,
+                        text="zrezygnuj",
+                        command=destroyVars,
+                    )
+                body3.pack()
+                body3.place(x=self.posx, y=self.posy+20, height=20, width=300)
+                bodies.append(body3)
+
+            self.posy+=20
+
+            question = tk.Label(
+                    self.window,
+                    text=self.extra[0],
+                    font=("Helvetica", 16),
+                    bg='yellow'
+                )
+            question.pack()
+            question.place(x=self.posx, y=self.posy, height=20, width=300)
+            bodies.append(question)
+
+            self.posy+=20
+            body = tk.Button(
+                    self.window,
+                    text="Tak",
+                    command=returnPositive,
+                )
+            body.pack()
+            body.place(x=self.posx, y=self.posy, height=20, width=150)
+            bodies.append(body)
+            
+            body2 = tk.Button(
+                    self.window,
+                    text="Nie",
+                    command=returnNegative,
+                )
+            body2.pack()
+            body2.place(x=self.posx+150, y=self.posy, height=20, width=150)
+            bodies.append(body2)
+
+            return extravals, bodies
+
+
 
 
         
