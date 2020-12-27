@@ -481,7 +481,7 @@ class MEDpress(object):
                     for value in values:
                         if value.get()!='':
                             final+=value.get()+", "
-                        readed[keys]=final.strip(",")
+                        readed[keys]=final.rstrip(", ")
 
                 else: readed[keys] = self.entryBoxList[keys].get()
             except AttributeError:

@@ -102,7 +102,7 @@ class vardrawing(tk.Widget):
             extravals=[]
 
             def returnDrawing():
-                new = vardrawing(self.extra[1],self.window,"if",self.posx+400,self.posy-40,self.tmpdict)
+                new = vardrawing(self.extra[1],self.window,"if",self.posx,self.posy-40,self.tmpdict)
                 
                 heading = new.drawheading()
 
@@ -111,6 +111,15 @@ class vardrawing(tk.Widget):
                 bodies.append(heading)
                 bodies.append(newbodies)
                 bodies.append(newvals)
+
+                body3 = tk.Button(
+                        self.window,
+                        text="zrezygnuj",
+                        command=destroyBodies,
+                    )
+                body3.pack()
+                body3.place(x=new.posx, y=new.posy+20, height=20, width=300)
+                bodies.append(body3)
 
                 if new.vartype=="CB": 
                     extravals.extend(newvals)
@@ -130,7 +139,7 @@ class vardrawing(tk.Widget):
                                 pass
                     else: 
                         body.destroy()
-                #extravals.clear()
+                        extravals.clear()
 
                 
 
