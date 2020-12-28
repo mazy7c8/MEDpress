@@ -22,7 +22,7 @@ class vardrawing(tk.Widget):
     def drawheading(self):
             heading = tk.Label(
                 self.window,
-                text="Zmienna "+str(self.name)+" typu:"+str(self.vartype),
+                text="Zmienna "+str(self.name)+" typu: "+str(self.vartype),
                 font=("Helvetica", 16),
                 bg=self.window["bg"]
             )
@@ -337,6 +337,19 @@ class vardrawing(tk.Widget):
             bodies.append(body2)
 
             return calendar, bodies
+
+        if self.vartype=="NB":
+            self.posy+=20
+
+            sc = tk.Scale(
+                self.window,
+                orient="horizontal",
+                from_=self.extra[0],
+                to=self.extra[1]
+            )
+            sc.pack()
+            sc.place(x=self.posx, y=self.posy, height=40, width=300)
+            return sc, sc
         
         else:
             body = tk.Label(
