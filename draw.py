@@ -1,4 +1,7 @@
 import tkinter as tk
+from tkinter import ttk
+import tkcalendar as tc
+from datetime import date
 
 class vardrawing(tk.Widget):
     def __init__(self,name,window,vartype,posx,posy,tmpdict):
@@ -253,9 +256,87 @@ class vardrawing(tk.Widget):
 
             return extravals, bodies
 
+        if self.vartype=="DT":
+            bodies=[]
+            calendar = tk.StringVar()
+            today = date.today().strftime("%d-%m-%y")
+            calendar.set(today)
 
 
+            def redrawLabel(y):
+                print(calendar.get())
+                question = tk.Label(
+                        self.window,
+                        text=calendar.get(),
+                        font=("Helvetica", 16),
+                        bg='yellow'
+                    )
+                question.pack()
+                question.place(x=self.posx, y=self.posy+y, height=20, width=300)
+                bodies.append(question)
 
+
+            def createCalendar():
+                top = tk.Toplevel()
+                x = self.window.winfo_x()
+                y = self.window.winfo_y()
+                top.geometry("+%d+%d" % (x + self.posx, y + self.posy))
+                
+                cal = tc.Calendar(
+                    top,
+                    font="Georgia 14",
+                    selectmode='day',
+                    locale="pl",
+                    textvariable=calendar,
+                    foreground="red",
+                    selectforeground="red",
+                    background="grey",
+                    showweeknumbers=False,
+                    )
+                cal.pack(fill="both", expand=True)
+                cal.bind('<<CalendarSelected>>',lambda event: redrawLabel(-20))
+
+                # btn = tk.Button(
+                #     top,
+                #     text="ok",
+                #     command=cal.selection_get)
+                # btn.pack(fill="both",expand=True)
+
+            self.posy+=20            
+            question = tk.Label(
+                    self.window,
+                    text=calendar.get(),
+                    font=("Helvetica", 16),
+                    bg='yellow'
+                    )
+            question.pack()
+            question.place(x=self.posx, y=self.posy, height=20, width=300)
+            bodies.append(question)
+
+            self.posy+=20
+            body = tk.Button(
+                    self.window,
+                    text="Ustaw",
+                    command=createCalendar,
+                )
+            body.pack()
+            body.place(x=self.posx, y=self.posy, height=20, width=150)
+            bodies.append(body)
+
+            def deleteVar():
+                calendar.set("")
+                redrawLabel(-20)
+            
+            body2 = tk.Button(
+                    self.window,
+                    text="Zrezygnuj",
+                    command=deleteVar,
+                )
+            body2.pack()
+            body2.place(x=self.posx+150, y=self.posy, height=20, width=150)
+            bodies.append(body2)
+
+            return calendar, bodies
         
         else:
             body = tk.Label(
@@ -269,7 +350,4 @@ class vardrawing(tk.Widget):
             return body, body
         
             
-
-
-
 
