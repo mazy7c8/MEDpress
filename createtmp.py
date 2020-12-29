@@ -5,6 +5,7 @@ import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
 from item import ListItem, readTemplate
 import json
+from idlelib.tooltip import Hovertip
 
 
 def template_window(self,template):
@@ -53,6 +54,7 @@ NB = widżet liczby"""
     titleentry.pack()
     titleentry.insert(0,template.name)
     titleentry.place(x=36, y=64, height=30, width=226)
+    myTip1=Hovertip(titleentry,"Tutaj mozen zmienic nazwę pliku")
 
     def saveValues():
         value = titleentry.get()
@@ -91,6 +93,7 @@ NB = widżet liczby"""
     abbrentry.pack()
     abbrentry.insert(0,template.abbr)
     abbrentry.place(x=320, y=64, height=30, width=226)
+    myTip2=Hovertip(abbrentry,"Tutaj mozesz zdefiniowac customowy skrot")
 
     authorlabel = tk.Label(
         self.window,
@@ -109,6 +112,7 @@ NB = widżet liczby"""
         #template.author=ListItem.readAuthor(template)
     authorentry.insert(0,template.author)
     authorentry.place(x=600, y=64, height=30, width=226)
+    myTip3=Hovertip(authorentry,"Tutaj wpisz swoje imie jezeli chcesz")
 
     codelabel = tk.Label(
         self.window,
@@ -131,6 +135,7 @@ NB = widżet liczby"""
     textcode.pack()
     textcode.place(y=144, x=36, height=481, width=226)
     textcode.bind("<Key>", lambda event : textAction())
+    myTip4=Hovertip(textcode,"To tekst szablonu wraz z nagłówkiem, możesz dodawać zmienne")
 
     templatelabel = tk.Label(
         self.window,
@@ -153,6 +158,7 @@ NB = widżet liczby"""
     texttemplate.pack()
     texttemplate.place(y=144, x=320, height=481, width=226)
     texttemplate.bind("<Key>", lambda event : varAction())
+    myTip5=Hovertip(texttemplate,"Tutaj zdefiniuj każdą ze zmiennych wg własnych potrzeb")
 
 
     
@@ -174,6 +180,7 @@ NB = widżet liczby"""
     textlegend.pack()
     textlegend.place(y=144, x=600)
     #textlegend.insert(INSERT, legend)
+    myTip6=Hovertip(textlegend,"To są skroty zmiennych ktore wykorzystasz w polu z lewej")
 
     generatebutton = tk.Button(
         self.window,
@@ -185,6 +192,7 @@ NB = widżet liczby"""
     )
     generatebutton.pack()
     generatebutton.place(x=36, y=630)
+    myTip7=Hovertip(generatebutton,"Wygeneruj kod szablonu dla nowych zmiennych")
 
     savebutton = tk.Button(
         self.window,
@@ -196,6 +204,8 @@ NB = widżet liczby"""
         )
     savebutton.pack()
     savebutton.place(x=600, y=630)
+    myTip8=Hovertip(savebutton,"Zapisz wszystkie zmiany")
+
 
     btn = tk.Button(
         self.window,

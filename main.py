@@ -14,6 +14,7 @@ from draw import vardrawing
 try: import win32api 
 except ImportError as e:
     print(e)
+from idlelib.tooltip import Hovertip
 
 class MEDpress(object):        
     def __init__(self, parent):
@@ -69,6 +70,7 @@ class MEDpress(object):
         )
         button1.pack()
         button1.place(y=44, x=79)
+        myTip1 = Hovertip(button1,"Tutaj zacznij tworzenie nowego formularza od podstaw")
 
         button2 = tk.Button(
             self.frame,
@@ -81,6 +83,7 @@ class MEDpress(object):
         )
         button2.pack()
         button2.place(y=44, x=279)
+        myTip2 = Hovertip(button2,"Wgraj formularz znajdujacy sie poza folderem szablonow na liste")
 
         button3 = tk.Button(
             self.frame,
@@ -92,6 +95,8 @@ class MEDpress(object):
         )
         button3.pack()
         button3.place(y=44, x=479)
+        myTip3 = Hovertip(button3,"Świat formularzy z internetu")
+
 
         self.textfield = tk.Text(
             self.frame,
@@ -102,6 +107,8 @@ class MEDpress(object):
         self.textfield.place(y=44, x=714, height=147, width=573)
         self.textfield.bind("<Tab>", focus_next_widget)
         self.textfield.bind("<Return>", lambda event : self.getTextEntry())
+        myTip4 = Hovertip(self.textfield,"Aby zaczac wpisz skrot formularza z listy po lewej")
+
 
 
         texfieldlabel = tk.Label(
@@ -121,6 +128,8 @@ class MEDpress(object):
         )
         keyinfolabel.pack()
         keyinfolabel.place(x=50, y=17, height=20, width=360)
+        myTip5 = Hovertip(keyinfolabel,"Najwazniejsze skroty klawiszowe w programie")
+
 
         Xbutton = tk.Button(
             self.frame,
@@ -133,6 +142,7 @@ class MEDpress(object):
         )
         Xbutton.pack()
         Xbutton.place(x=1250, y=44)
+        myTip6 = Hovertip(Xbutton,"Wyczysc pole")
 
         self.tree = ttk.Treeview(
             takefocus=1
@@ -157,7 +167,7 @@ class MEDpress(object):
         self.tree.focus_set()
         self.tree.focus(child_id)
         self.tree.selection_set(child_id)
-
+        #myTip7 = Hovertip(tk.Widget,"Tutaj znajduja sie wszystkie formularze z katalogu szablony")
 
 
         treelabel = tk.Label(
@@ -180,6 +190,8 @@ class MEDpress(object):
         )
         editbutton.pack()
         editbutton.place(y=224, x=320)
+        myTip8 = Hovertip(editbutton,"Użyj aby podejrzec zawartosc formularza lub wprowadzic w nim zmiany")
+
 
         savebutton = tk.Button(
             self.frame,
@@ -191,6 +203,7 @@ class MEDpress(object):
         )
         savebutton.pack()
         savebutton.place(y=224, x=460)
+        myTip9 = Hovertip(savebutton,"Eksportuj wszystkie formularze do archiwum")
 
         refreshbutton = tk.Button(
             self.frame,
@@ -203,6 +216,7 @@ class MEDpress(object):
         )
         refreshbutton.pack()
         refreshbutton.place(y=224, x=180)
+        myTip10 = Hovertip(refreshbutton,"Odśwież listę formularzy i wyczyść okno rysowania")
 
         self.startbutton = tk.Button(
             self.frame,
@@ -218,6 +232,7 @@ class MEDpress(object):
         self.startbutton.pack()
         self.startbutton.place(x=840, y=201)
         self.startbutton.bind("<Return>", lambda event : self.getTextEntry())
+        myTip11 = Hovertip(self.startbutton,"Zacznij rysowanie formularza z pola powyzej")
 
 
         self.clipboardbutton = tk.Button(
@@ -232,6 +247,7 @@ class MEDpress(object):
         )
         self.clipboardbutton.pack()
         self.clipboardbutton.place(x=998, y=201)
+        myTip12 = Hovertip(self.clipboardbutton,"Skopiuj pole powyzej do systemowego schowka")
 
         exportbutton = tk.Button(
             self.frame,
@@ -242,7 +258,9 @@ class MEDpress(object):
             takefocus=0,
         )
         exportbutton.pack()
-        exportbutton.place(x=1156, y=201)
+        exportbutton.place(x=1156, y=201)        
+        myTip13 = Hovertip(exportbutton,"Otworz powyższe w nowej aplikacji")
+
         progressbar = ttk.Progressbar(
             self.frame, orient="horizontal", length=500, mode="determinate")
         progressbar.pack()
@@ -271,6 +289,7 @@ class MEDpress(object):
         self.endworkbutton.pack()
         self.endworkbutton.place(x=1175, y=839)        
         self.endworkbutton.bind("<Return>", lambda event : self.readWork())
+        myTip14 = Hovertip(self.endworkbutton,"Wygeneruj wydruk formularza z podanych zmiennych")
 
 
         self.root.bind("<Control-s>", lambda event, : self.getTextEntry())
