@@ -383,7 +383,9 @@ class MEDpress(object):
 
     def updateTextfield(self):
         self.textfield.delete('1.0', END)
-        self.textfield.insert(INSERT, self.druk)
+        stripped = re.search(r'\n\n.*',self.druk)
+        stripped = re.sub(r'^$\n', '', stripped.group(0), flags=re.MULTILINE)
+        self.textfield.insert(INSERT, stripped)
 
     def cleanTextfield(self):
         self.textfield.delete("1.0", END)
