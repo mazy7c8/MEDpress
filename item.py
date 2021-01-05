@@ -60,7 +60,7 @@ class ListItem(object):
 
     def writeAuthor(self,var):
         self.author=var
-        infoline="### author="+var
+        infoline="### author="+var+" ###"
         with open(os.path.join("szablony",self.name+".txt"),'r+') as f:
             content = f.read()
             f.seek(0, 0)
@@ -95,7 +95,7 @@ class ListItem(object):
             f.seek(0, 0)
             firstline = f.readline()
             if firstline.startswith('###'):
-               firstline="### author="+aut+" "+varline+'\n'
+               firstline="### author="+aut+" "+varline+" ###"+'\n'
                f.seek(0, 0)
                f.readline()
                content=f.read()
