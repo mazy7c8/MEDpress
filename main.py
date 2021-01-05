@@ -335,6 +335,7 @@ class MEDpress(object):
         #self.templateStack.clear()
 
         datafromfolder = readFolder()
+        #print(self.templateStack, self.found)
         result = zip(datafromfolder,self.templateStack)
         for data, instance in list(result):
             instance.updateInstance(data[1], data[2], data[0])
@@ -383,9 +384,12 @@ class MEDpress(object):
 
     def updateTextfield(self):
         self.textfield.delete('1.0', END)
-        stripped = re.search(r'\n\n.*',self.druk)
-        stripped = re.sub(r'^$\n', '', stripped.group(0), flags=re.MULTILINE)
-        self.textfield.insert(INSERT, stripped)
+        try:
+            stripped = re.search(r'\n\n.*',self.druk)
+            stripped = re.sub(r'^$\n', '', stripped.group(0), flags=re.MULTILINE)
+            self.textfield.insert(INSERT, stripped)
+        except AttributeError:
+            self.textfield.insert(INSERT,self.druk)
 
     def cleanTextfield(self):
         self.textfield.delete("1.0", END)
@@ -452,7 +456,10 @@ class MEDpress(object):
         #     x += 1
 
         for item in lista:
-            drawing[item]=vardrawing(item,self.frame,template.dictionary[item],horizontalpos,verticalpos,template.dictionary)
+            try: drawing[item]=vardrawing(item,self.frame,template.dictionary[item],horizontalpos,verticalpos,template.dictionary)
+            except KeyError:
+                drawing[item]=vardrawing(item,self.frame,"TX",horizontalpos,verticalpos,template.dictionary)
+
             verticalpos+=100
 
         listofbodies = {}
@@ -494,7 +501,7 @@ class MEDpress(object):
         self.endworkbutton.config(bg="#00FF00")
         root.after(100, lambda: self.endworkbutton.config(bg='lightgrey'))
         readed = {}
-        print(self.entryBoxList)
+        #print(self.entryBoxList)
         for keys,values in self.entryBoxList.items():
             try:
                 if type(values) is list:

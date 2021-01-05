@@ -3,12 +3,13 @@ from tkinter import font
 from tkinter.constants import LEFT
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
-from item import ListItem, readTemplate
+from item import ListItem, readTemplate, readWithooutHeader
 import json
 from idlelib.tooltip import Hovertip
 
 
 def template_window(self,template):
+    #print(template)
     self.window = tk.Toplevel()
     self.window.geometry("868x712")
     self.window.title("Tworz szablony")
@@ -18,6 +19,8 @@ def template_window(self,template):
 
     self.textaction=False
     self.varaction=False
+    self.nameaction=False
+    self.authoraction=False
 
     legend = """TX = standardowa
 zmienna tekstowa
@@ -39,6 +42,9 @@ DT = widżet daty
 NB = widżet liczby"""
 
 
+    def nameAction():
+        self.nameaction=True
+
     titlelabel = tk.Label(
         self.window,
         text="Tytuł",
@@ -54,6 +60,8 @@ NB = widżet liczby"""
     titleentry.pack()
     titleentry.insert(0,template.name)
     titleentry.place(x=36, y=64, height=30, width=226)
+    titleentry.bind("<Key>", lambda event : nameAction())
+
     myTip1=Hovertip(titleentry,"Tutaj mozen zmienic nazwę pliku")
 
     def saveValues():
@@ -62,21 +70,31 @@ NB = widżet liczby"""
         value3 = textcode.get(1.0,END)
         value4 = texttemplate.get(1.0,END)
         if self.textaction==True: 
-            ListItem.updateText(template,value3)
+            #ListItem.updateText(template,value3)
+            template.updateText(value3)
             print("textaction")
 
         if self.varaction==True:
             ListItem.writeVars(template,value4,value2)
             print("varaction")
 
-        ListItem.updateName(template,value)
-        ListItem.writeAuthor(template,value2)
+        
+        if self.nameaction==True:
+            ListItem.updateName(template,value)
+            print("nameaction")
+
+        if self.authoraction==True:
+            print("authoraction")
+            ListItem.writeAuthor(template,value2)
 
     def textAction():
         self.textaction=True
 
     def varAction():
         self.varaction=True
+
+    def authorAction():
+        self.authoraction=True
 
     abbrlabel = tk.Label(
         self.window,
@@ -112,6 +130,7 @@ NB = widżet liczby"""
         #template.author=ListItem.readAuthor(template)
     authorentry.insert(0,template.author)
     authorentry.place(x=600, y=64, height=30, width=226)
+    authorentry.bind("<Key>", lambda event : authorAction())
     myTip3=Hovertip(authorentry,"Tutaj wpisz swoje imie jezeli chcesz")
 
     codelabel = tk.Label(
@@ -128,6 +147,7 @@ NB = widżet liczby"""
     )
     try:
         plaincode = readTemplate(template)
+        #plaincode = readWithooutHeader(template)
         textcode.insert(INSERT,plaincode)
     except:
         pass
@@ -182,13 +202,22 @@ NB = widżet liczby"""
     #textlegend.insert(INSERT, legend)
     myTip6=Hovertip(textlegend,"To są skroty zmiennych ktore wykorzystasz w polu z lewej")
 
+    def generateVars():
+        newListItem = ListItem(template.name,None,None)
+        newListItem.updateText(textcode.get(1.0,END))
+        new = newListItem.makeDict(template.name)
+        texttemplate.delete('1.0', END)
+        texttemplate.insert(INSERT,new)
+
+
+
     generatebutton = tk.Button(
         self.window,
         text="Generuj kod",
         width=10,
         height=2,
         bg="lightgrey",
-        command=None
+        command=generateVars
     )
     generatebutton.pack()
     generatebutton.place(x=36, y=630)

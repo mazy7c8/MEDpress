@@ -23,20 +23,30 @@ class ListItem(object):
 
     def makeDict(self,name):
         if name!="":
-            with open(os.path.join("szablony",name+".txt"),'r+') as f:
-                f.seek(0, 0)
-                firstline = f.readline()
-                if firstline.startswith('###'):
-                    hardcodeddict = re.search(r'(?<=\{)(.*?)(?=\})',firstline)
-                    if hardcodeddict != None:
-                        return ast.literal_eval('{'+hardcodeddict.group()+'}')
-            
             data = open(os.path.join("szablony",name+".txt"),"r",encoding="utf-8")
             plaincode = data.read()
             schema = infer(plaincode)
             #schema = (json.dumps(schema,indent=3))
             for item in schema.keys():
                 schema.__setitem__(item,"TX")
+
+            with open(os.path.join("szablony",name+".txt"),'r+') as f:
+                f.seek(0, 0)
+                firstline = f.readline()
+                if firstline.startswith('###'):
+                    hardcodeddict = re.search(r'(?<=\{)(.*?)(?=\})',firstline)
+                    if hardcodeddict != None:
+                        decodeddict = dict(ast.literal_eval('{'+hardcodeddict.group()+'}'))
+                        diff = set(schema.keys()) - set(decodeddict.keys())
+                        #print(diff,list(diff))
+                        if not list(diff):
+                            return decodeddict
+                        else: 
+                            print('dodano zmnienno')
+                            for item in diff:
+                                decodeddict[item]="TX"
+                            return decodeddict
+            
             return schema
         pass
 
@@ -60,7 +70,7 @@ class ListItem(object):
 
     def writeAuthor(self,var):
         self.author=var
-        infoline="### author="+var+" ###"
+        infoline="### author="+var
         with open(os.path.join("szablony",self.name+".txt"),'r+') as f:
             content = f.read()
             f.seek(0, 0)
@@ -74,14 +84,15 @@ class ListItem(object):
                f.write(firstline + content)
                f.close()
             else:
-                print("puste")
+                print("dodano autora")
                 f.seek(0, 0)
-                f.write(infoline.rstrip('\r\n') + '\n'+'\n' + content)
+                f.write(infoline.rstrip('\r\n') +'\n'+'\n'+ content)
                 f.close()
     
     def updateText(self,var):
         with open(os.path.join("szablony",self.name+".txt"),'r+',encoding="utf-8") as f:
             f.truncate(0)
+            f.seek(0,0)
             f.write(var)
             f.close()
 
@@ -95,7 +106,7 @@ class ListItem(object):
             f.seek(0, 0)
             firstline = f.readline()
             if firstline.startswith('###'):
-               firstline="### author="+aut+" "+varline+" ###"+'\n'
+               firstline="### author="+aut+" "+varline+'\n'
                f.seek(0, 0)
                f.readline()
                content=f.read()
@@ -103,7 +114,13 @@ class ListItem(object):
                f.write(firstline + content)
                f.close()
             else:
-                print("puste")
+                print("bez naglowka")
+                f.seek(0, 0)
+                content=f.read()
+                f.seek(0, 0)
+                firstline="### author="+aut+" "+varline+'\n'
+                f.write(firstline +'\n'+ content)
+                f.close()
         
 
 
@@ -122,4 +139,14 @@ def readTemplate(template):
     data = open(os.path.join("szablony",template.name+".txt"),"r",encoding="utf-8")
     #data.readline()
     return data.read()
+
+def readWithooutHeader(template):
+    data=open(os.path.join("szablony",template.name+".txt"),"r",encoding="utf-8")
+    readed = data.read()
+    stripped = re.search(r'\n\n.*', readed)
+    if readed:
+        stripped = re.sub(r'^$\n', '', stripped.group(0), flags=re.MULTILINE)
+        return stripped
+    else:
+        return data.read()
 
