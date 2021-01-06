@@ -456,11 +456,21 @@ class MEDpress(object):
         #     x += 1
 
         for item in lista:
+            if verticalpos>=850:
+                verticalpos = 300
+                horizontalpos = 950
+
             try: drawing[item]=vardrawing(item,self.frame,template.dictionary[item],horizontalpos,verticalpos,template.dictionary)
             except KeyError:
                 drawing[item]=vardrawing(item,self.frame,"TX",horizontalpos,verticalpos,template.dictionary)
 
-            verticalpos+=100
+            verticalpos+=50
+            if template.dictionary[item][0]=="CB":
+                verticalpos+=20*len(template.dictionary[item][2:])
+            if template.dictionary[item]=="DT":
+                verticalpos+=20
+            if template.dictionary[item][0]=="RC":
+                verticalpos+=20*len(template.dictionary[item][1:])
 
         listofbodies = {}
         for item in lista:
