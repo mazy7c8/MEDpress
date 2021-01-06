@@ -130,6 +130,7 @@ class vardrawing(tk.Widget):
                     bodies.extend(newbodies)
                 else:
                     extravals.append(newvals)
+                    bodies.extend(newbodies)
 
                 
             
@@ -262,18 +263,22 @@ class vardrawing(tk.Widget):
             today = date.today().strftime("%d-%m-%y")
             calendar.set(today)
 
-
-            def redrawLabel(y):
-                print(calendar.get())
-                question = tk.Label(
-                        self.window,
-                        text=calendar.get(),
-                        font=("Helvetica", 16),
-                        bg='yellow'
+            self.posy+=20            
+            self.question = tk.Label(
+                    self.window,
+                    text=calendar.get(),
+                    font=("Helvetica", 16),
+                    bg='yellow'
                     )
-                question.pack()
-                question.place(x=self.posx, y=self.posy+y, height=20, width=300)
-                bodies.append(question)
+            self.question.pack()
+            self.question.place(x=self.posx, y=self.posy, height=20, width=300)
+            bodies.append(self.question)
+
+
+            def redrawLabel(y,window=None):
+                self.question.configure(text=calendar.get())
+                if window:
+                    window.destroy()
 
 
             def createCalendar():
@@ -294,7 +299,8 @@ class vardrawing(tk.Widget):
                     showweeknumbers=False,
                     )
                 cal.pack(fill="both", expand=True)
-                cal.bind('<<CalendarSelected>>',lambda event: redrawLabel(-20))
+                cal.bind('<<CalendarSelected>>',lambda event: redrawLabel(-20, top))
+                #cal.bind('<<CalendarSelected>>',lambda event: top.destroy())
 
                 # btn = tk.Button(
                 #     top,
@@ -302,16 +308,7 @@ class vardrawing(tk.Widget):
                 #     command=cal.selection_get)
                 # btn.pack(fill="both",expand=True)
 
-            self.posy+=20            
-            question = tk.Label(
-                    self.window,
-                    text=calendar.get(),
-                    font=("Helvetica", 16),
-                    bg='yellow'
-                    )
-            question.pack()
-            question.place(x=self.posx, y=self.posy, height=20, width=300)
-            bodies.append(question)
+          
 
             self.posy+=20
             body = tk.Button(
