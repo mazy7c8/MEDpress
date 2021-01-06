@@ -15,7 +15,10 @@ class vardrawing(tk.Widget):
         self.tmpdict=tmpdict
 
         if vartype=="if":
-            self.vartype=tmpdict[name][0]
+            if type(vartype)==list:
+                self.vartype=tmpdict[name][0]
+            else:
+                self.vartype=tmpdict[name]
             self.extra=tmpdict[name][1:]
 
 
@@ -130,7 +133,7 @@ class vardrawing(tk.Widget):
                     bodies.extend(newbodies)
                 else:
                     extravals.append(newvals)
-                    bodies.extend(newbodies)
+                    #bodies.extend(newbodies)
 
                 
             
@@ -143,7 +146,10 @@ class vardrawing(tk.Widget):
                             except:
                                 pass
                     else: 
-                        body.destroy()
+                        try: 
+                            body.destroy()
+                        except:
+                            pass
                         extravals.clear()
 
                 

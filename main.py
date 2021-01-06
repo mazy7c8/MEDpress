@@ -466,8 +466,14 @@ class MEDpress(object):
                 verticalpos+=50
                 if template.dictionary[item][0]=="CB":
                     verticalpos+=20*len(template.dictionary[item][2:])
-                if template.dictionary[item]=="DT":
-                    verticalpos+=20
+                if template.dictionary[item]=="DT" or template.dictionary[item][0]=="DT":
+                    verticalpos+=15
+                if template.dictionary[item][0]=="TN":
+                    verticalpos+=30
+                if template.dictionary[item][0]=="IF":
+                    passing = template.dictionary[item][2]
+                    length = template.dictionary[passing][1:]
+                    verticalpos+=20+20*(len(length)-1)
                 if template.dictionary[item][0]=="RC":
                     verticalpos+=20*len(template.dictionary[item][1:])
             
