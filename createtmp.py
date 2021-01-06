@@ -208,6 +208,8 @@ NB = widżet liczby"""
         new = newListItem.makeDict(template.name)
         texttemplate.delete('1.0', END)
         texttemplate.insert(INSERT,new)
+        self.varaction=True
+        saveValues()
 
 
 
