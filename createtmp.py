@@ -6,6 +6,7 @@ from tkinter import Canvas, Frame, INSERT, END
 from item import ListItem, readTemplate, readWithooutHeader
 import json
 from idlelib.tooltip import Hovertip
+import re
 
 
 def template_window(self,template):
@@ -151,6 +152,9 @@ NB = widżet liczby"""
     try:
         plaincode = readTemplate(template)
         #plaincode = readWithooutHeader(template)
+        #stripped = re.search(r'\n.*?',plaincode)
+        #stripped = re.sub(r'^$\n', '', stripped.group(0), flags=re.MULTILINE)
+
         textcode.insert(INSERT,plaincode)
     except:
         pass
@@ -171,10 +175,10 @@ NB = widżet liczby"""
     texttemplate = tk.Text(
         self.window,
         bg='white',
-        font = '12'
+        font = '8'
     )
     try:
-        texttemplate.insert(INSERT,template.dictionary)
+        texttemplate.insert(INSERT,json.dumps(template.dictionary,indent=1))
 
     except: 
         pass

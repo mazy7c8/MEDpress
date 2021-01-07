@@ -2,7 +2,7 @@ from subprocess import CalledProcessError
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.font as tf
-from tkinter import Canvas, Event, Frame, INSERT, END
+from tkinter import Canvas, Event, Frame, INSERT, END, PhotoImage
 from createtmp import template_window
 from item import ListItem, readFolder, readTemplate
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape, meta
@@ -475,13 +475,13 @@ class MEDpress(object):
             if template.dictionary[item]=="DT" or template.dictionary[item][0]=="DT":
                 verticalpos+=15
             if template.dictionary[item][0]=="TN":
-                verticalpos+=20
+                verticalpos+=30
             if template.dictionary[item][0]=="NB":
                 verticalpos+=15
             if template.dictionary[item][0]=="IF":
                 passing = template.dictionary[item][2]
                 length = template.dictionary[passing][1:]
-                verticalpos+=20*len(length)
+                verticalpos+=30+20*len(length)
             if template.dictionary[item][0]=="RC":
                 verticalpos+=20*len(template.dictionary[item][2:])
             
@@ -587,6 +587,9 @@ if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("1300x900")
     root.call('encoding', 'system', 'utf-8')
-    root.iconbitmap('icon.ico')
+    try:
+        root.iconbitmap('icon.ico')
+    except:
+        root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='icon.ico'))
     app = MEDpress(root)
     root.mainloop()
