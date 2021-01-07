@@ -65,6 +65,9 @@ NB = widżet liczby"""
     myTip1=Hovertip(titleentry,"Tutaj mozen zmienic nazwę pliku")
 
     def saveValues():
+        savebutton.config(bg="#00FF00")
+        self.root.after(100, lambda: savebutton.config(bg='lightgrey'))
+
         value = titleentry.get()
         value2 = authorentry.get()
         value3 = textcode.get(1.0,END)
@@ -236,6 +239,18 @@ NB = widżet liczby"""
     savebutton.pack()
     savebutton.place(x=600, y=630)
     myTip8=Hovertip(savebutton,"Zapisz wszystkie zmiany")
+    self.window.bind("<Control-s>",  lambda event, : saveValues ())
+
+    keyinfolabel = tk.Label(
+            self.window,
+            text="Ctrl+s zapisz zmiany",
+            font=("Georgia", 10),
+            bg=self.window['bg']
+        )
+    keyinfolabel.pack()
+    keyinfolabel.place(x=600, y=600, height=20, width=150)
+
+
 
 
     btn = tk.Button(

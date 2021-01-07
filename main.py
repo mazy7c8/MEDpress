@@ -127,7 +127,7 @@ class MEDpress(object):
             bg=self.root['bg']
         )
         keyinfolabel.pack()
-        keyinfolabel.place(x=50, y=17, height=20, width=360)
+        keyinfolabel.place(x=100, y=17, height=20, width=500)
         myTip5 = Hovertip(keyinfolabel,"Najwazniejsze skroty klawiszowe w programie")
 
 
@@ -304,7 +304,7 @@ class MEDpress(object):
             # MACOS
             cmd = 'echo '+textEntry.strip()+'|pbcopy'
             return subprocess.check_call(cmd, shell=True)
-        except:
+        except:             
             print("no macos")
         
         try:
