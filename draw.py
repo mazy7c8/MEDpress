@@ -15,7 +15,8 @@ class vardrawing(tk.Widget):
         self.tmpdict=tmpdict
 
         if vartype=="if":
-            if type(vartype)==list:
+            #print(type(vartype))
+            if type(vartype)==str: ##todo [] and '' encapsulation
                 self.vartype=tmpdict[name][0]
             else:
                 self.vartype=tmpdict[name]
@@ -26,7 +27,7 @@ class vardrawing(tk.Widget):
             heading = tk.Label(
                 self.window,
                 text="Zmienna "+str(self.name)+" typu: "+str(self.vartype),
-                font=("Helvetica", 16),
+                font=("Helvetica", 14),
                 bg=self.window["bg"]
             )
             heading.pack()
@@ -117,23 +118,34 @@ class vardrawing(tk.Widget):
 
                 bodies.append(heading)
                 bodies.append(newbodies)
-                bodies.append(newvals)
+                #bodies.append(newvals)
 
-                body3 = tk.Button(
-                        self.window,
-                        text="zrezygnuj",
-                        command=destroyBodies,
-                    )
-                body3.pack()
-                body3.place(x=new.posx, y=new.posy+20, height=20, width=300)
-                bodies.append(body3)
+                increment=20
 
+           
                 if new.vartype=="CB": 
                     extravals.extend(newvals)
                     bodies.extend(newbodies)
+                if new.vartype=="TN": ##todo if+TN
+                    extravals.append(newvals)
+                    bodies.extend(newbodies)
+                if new.vartype=="NB": ##todo if+NB
+                    increment=40
+                    extravals.append(newvals)
+                    bodies.extend(newbodies)
                 else:
                     extravals.append(newvals)
-                    #bodies.extend(newbodies)
+                    bodies.extend(newbodies)
+
+                body3 = tk.Button(
+                self.window,
+                text="zrezygnuj",
+                command=destroyBodies,
+                    )
+                body3.pack()
+                body3.place(x=new.posx, y=new.posy+increment, height=20, width=300)
+                bodies.append(body3)
+
 
                 
             
@@ -184,8 +196,6 @@ class vardrawing(tk.Widget):
             body2.pack()
             body2.place(x=self.posx+150, y=self.posy, height=20, width=150)
             bodies.append(body2)
-
-
 
             return extravals, bodies
 
@@ -283,6 +293,7 @@ class vardrawing(tk.Widget):
 
             def redrawLabel(y,window=None):
                 self.question.configure(text=calendar.get())
+                bodies.append(self.question)
                 if window:
                     window.destroy()
 

@@ -141,7 +141,7 @@ class MEDpress(object):
             takefocus=0
         )
         Xbutton.pack()
-        Xbutton.place(x=1250, y=44)
+        Xbutton.place(x=1250, y=7)
         myTip6 = Hovertip(Xbutton,"Wyczysc pole")
 
         self.tree = ttk.Treeview(
@@ -438,7 +438,13 @@ class MEDpress(object):
             self.JinjaEnv, object.source)[0]
         parsed_content = self.JinjaEnv.parse(template_source)
         varlist = list(meta.find_undeclared_variables(parsed_content))
-        return varlist
+        
+        ordered = []
+        for m in  re.finditer(r'\{\{\s*(\w+)\s*\}\}',template_source):
+            ordered.append(m.group(1))
+        #print(ordered)
+
+        return ordered
 
     def drawRequests(self, lista, template):
 
@@ -456,29 +462,31 @@ class MEDpress(object):
         #     x += 1
 
         for item in lista:
-            if verticalpos>=850:
+            if verticalpos>=800:
                 verticalpos = 300
                 horizontalpos = 950
 
-            try: 
-                drawing[item]=vardrawing(item,self.frame,template.dictionary[item],horizontalpos,verticalpos,template.dictionary)
-
-                verticalpos+=50
-                if template.dictionary[item][0]=="CB":
-                    verticalpos+=20*len(template.dictionary[item][2:])
-                if template.dictionary[item]=="DT" or template.dictionary[item][0]=="DT":
-                    verticalpos+=15
-                if template.dictionary[item][0]=="TN":
-                    verticalpos+=30
-                if template.dictionary[item][0]=="IF":
-                    passing = template.dictionary[item][2]
-                    length = template.dictionary[passing][1:]
-                    verticalpos+=20+20*(len(length)-1)
-                if template.dictionary[item][0]=="RC":
-                    verticalpos+=20*len(template.dictionary[item][1:])
             
-            except KeyError:
-                drawing[item]=vardrawing(item,self.frame,"TX",horizontalpos,verticalpos,template.dictionary)
+            drawing[item]=vardrawing(item,self.frame,template.dictionary[item],horizontalpos,verticalpos,template.dictionary)
+
+            verticalpos+=50
+            if template.dictionary[item][0]=="CB":
+                verticalpos+=20*len(template.dictionary[item][2:])
+            if template.dictionary[item]=="DT" or template.dictionary[item][0]=="DT":
+                verticalpos+=15
+            if template.dictionary[item][0]=="TN":
+                verticalpos+=20
+            if template.dictionary[item][0]=="NB":
+                verticalpos+=15
+            if template.dictionary[item][0]=="IF":
+                passing = template.dictionary[item][2]
+                length = template.dictionary[passing][1:]
+                verticalpos+=20*len(length)
+            if template.dictionary[item][0]=="RC":
+                verticalpos+=20*len(template.dictionary[item][2:])
+            
+            # except KeyError:
+            #     drawing[item]=vardrawing(item,self.frame,"TX",horizontalpos,verticalpos,template.dictionary)
 
 
         listofbodies = {}

@@ -171,6 +171,7 @@ NB = widżet liczby"""
     texttemplate = tk.Text(
         self.window,
         bg='white',
+        font = '12'
     )
     try:
         texttemplate.insert(INSERT,template.dictionary)
