@@ -2,6 +2,9 @@ import datetime
 import os, os.path
 import time
 import re
+from tkinter import messagebox, Toplevel,Label,Button
+from tkinter.constants import LEFT
+import traceback, sys
 from jinja2schema import infer, to_json_schema
 import ast
 
@@ -97,30 +100,45 @@ class ListItem(object):
             f.close()
 
     def writeVars(self,vars,aut):
-        self.dictionary = ast.literal_eval(vars)
-        varline=str(vars)
-        varline=varline.strip('\n')
-        varline=varline.strip('\r')
-        with open(os.path.join("szablony",self.name+".txt"),'r+') as f:
-            content = f.read()
-            f.seek(0, 0)
-            firstline = f.readline()
-            if firstline.startswith('###'):
-               firstline="### author="+aut+" "+varline+'\n'
-               f.seek(0, 0)
-               f.readline()
-               content=f.read()
-               f.seek(0,0)
-               f.write(firstline + content)
-               f.close()
-            else:
-                print("bez naglowka")
+        try:
+            self.dictionary = ast.literal_eval(vars)
+           
+            varline=str(vars)
+            varline=varline.strip('\n')
+            varline=varline.strip('\r')
+            with open(os.path.join("szablony",self.name+".txt"),'r+') as f:
+                content = f.read()
                 f.seek(0, 0)
-                content=f.read()
-                f.seek(0, 0)
-                firstline="### author="+aut+" "+varline+'\n'
-                f.write(firstline +'\n'+ content)
-                f.close()
+                firstline = f.readline()
+                if firstline.startswith('###'):
+                    firstline="### author="+aut+" "+varline+'\n'
+                    f.seek(0, 0)
+                    f.readline()
+                    content=f.read()
+                    f.seek(0,0)
+                    f.write(firstline + content)
+                    f.close()
+                else:
+                    print("bez naglowka")
+                    f.seek(0, 0)
+                    content=f.read()
+                    f.seek(0, 0)
+                    firstline="### author="+aut+" "+varline+'\n'
+                    f.write(firstline +'\n'+ content)
+                    f.close()
+        
+        except SyntaxError as e:
+            error = traceback.format_exc()
+            #messagebox.showinfo("blad skladni", error)
+            window = Toplevel()
+
+            label = Label(window, text=error, font="Consolas 10",justify=LEFT)
+            label.pack(fill='x', padx=20, pady=100)
+
+            button_close = Button(window, text="Zamknij", command=window.destroy,)
+            button_close.pack(fill='x')
+            button_close.config(bg='red')
+        
         
 
 
