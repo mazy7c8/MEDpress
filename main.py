@@ -587,5 +587,6 @@ if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("1300x900")
     root.call('encoding', 'system', 'utf-8')
+    root.iconbitmap('icon.ico')
     app = MEDpress(root)
     root.mainloop()
