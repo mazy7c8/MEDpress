@@ -466,27 +466,28 @@ class MEDpress(object):
                 verticalpos = 300
                 horizontalpos = 950
 
-            
-            drawing[item]=vardrawing(item,self.frame,template.dictionary[item],horizontalpos,verticalpos,template.dictionary)
+            try:
+                drawing[item]=vardrawing(item,self.frame,template.dictionary[item],horizontalpos,verticalpos,template.dictionary)
 
-            verticalpos+=50
-            if template.dictionary[item][0]=="CB":
-                verticalpos+=20*len(template.dictionary[item][2:])
-            if template.dictionary[item]=="DT" or template.dictionary[item][0]=="DT":
-                verticalpos+=15
-            if template.dictionary[item][0]=="TN":
-                verticalpos+=30
-            if template.dictionary[item][0]=="NB":
-                verticalpos+=15
-            if template.dictionary[item][0]=="IF":
-                passing = template.dictionary[item][2]
-                length = template.dictionary[passing][1:]
-                verticalpos+=30+20*len(length)
-            if template.dictionary[item][0]=="RC":
-                verticalpos+=20*len(template.dictionary[item][2:])
-            
-            # except KeyError:
-            #     drawing[item]=vardrawing(item,self.frame,"TX",horizontalpos,verticalpos,template.dictionary)
+                verticalpos+=50
+                if template.dictionary[item][0]=="CB":
+                    verticalpos+=20*len(template.dictionary[item][2:])
+                if template.dictionary[item]=="DT" or template.dictionary[item][0]=="DT":
+                    verticalpos+=15
+                if template.dictionary[item][0]=="TN":
+                    verticalpos+=30
+                if template.dictionary[item][0]=="NB":
+                    verticalpos+=15
+                if template.dictionary[item][0]=="IF":
+                    passing = template.dictionary[item][2]
+                    length = template.dictionary[passing][1:]
+                    verticalpos+=30+20*len(length)
+                if template.dictionary[item][0]=="RC":
+                    verticalpos+=20*len(template.dictionary[item][2:])
+                
+            except KeyError:
+                drawing[item]=vardrawing(item,self.frame,"TX",horizontalpos,verticalpos,template.dictionary)
+                verticalpos+=50
 
 
         listofbodies = {}

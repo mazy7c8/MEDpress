@@ -73,6 +73,7 @@ NB = widżet liczby"""
         value2 = authorentry.get()
         value3 = textcode.get(1.0,END)
         value4 = texttemplate.get(1.0,END)
+        
         if self.textaction==True: 
             #ListItem.updateText(template,value3)
             template.updateText(value3)
@@ -175,10 +176,9 @@ NB = widżet liczby"""
     texttemplate = tk.Text(
         self.window,
         bg='white',
-        font = '8'
     )
     try:
-        texttemplate.insert(INSERT,json.dumps(template.dictionary,indent=1))
+        texttemplate.insert(INSERT,template.dictionary)
 
     except: 
         pass
@@ -216,8 +216,8 @@ NB = widżet liczby"""
         new = newListItem.makeDict(template.name)
         texttemplate.delete('1.0', END)
         texttemplate.insert(INSERT,new)
-        self.varaction=True
-        saveValues()
+        #self.varaction=True
+        #aveValues()
 
 
 
