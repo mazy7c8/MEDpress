@@ -123,13 +123,13 @@ class vardrawing(tk.Widget):
                 increment=20
 
            
-                if new.vartype=="CB": 
+                if new.vartype=="CB":
                     extravals.extend(newvals)
                     bodies.extend(newbodies)
-                if new.vartype=="TN": ##todo if+TN
+                elif new.vartype=="TN": ##todo if+TN
                     extravals.append(newvals)
                     bodies.extend(newbodies)
-                if new.vartype=="NB": ##todo if+NB
+                elif new.vartype=="NB": ##todo if+NB
                     increment=40
                     extravals.append(newvals)
                     bodies.extend(newbodies)
