@@ -11,9 +11,6 @@ import subprocess
 import re
 import time
 from draw import vardrawing
-try: import win32api 
-except ImportError as e:
-    print(e)
 from idlelib.tooltip import Hovertip
 
 class MEDpress(object):        
@@ -114,7 +111,7 @@ class MEDpress(object):
         texfieldlabel = tk.Label(
             self.frame,
             text="Wpisz skroty szablonow/gotowy tekst",
-            font=("Helvetica", 16),
+            font=("Helvetica", 10),
             bg=self.root['bg']
         )
         texfieldlabel.pack()
@@ -123,7 +120,7 @@ class MEDpress(object):
         keyinfolabel = tk.Label(
             self.frame,
             text="Ctrl+s rozpocznij wypis | Ctrl+z zakoncz wypis | Ctrl+c do schowka",
-            font=("Helvetica", 12),
+            font=("Helvetica", 10),
             bg=self.root['bg']
         )
         keyinfolabel.pack()
@@ -145,6 +142,7 @@ class MEDpress(object):
         myTip6 = Hovertip(Xbutton,"Wyczysc pole")
 
         self.tree = ttk.Treeview(
+            self.frame,
             takefocus=1
             )
         self.tree["columns"] = ("COL2", "COL3")
@@ -173,7 +171,7 @@ class MEDpress(object):
         treelabel = tk.Label(
             self.frame,
             text="Twoje szablony",
-            font=("Helvetica", 16),
+            font=("Helvetica", 10),
             bg=self.root['bg']
         )
         treelabel.pack()
@@ -555,7 +553,7 @@ class MEDpress(object):
 
         textlabel = tk.Label(
             self.frame,
-            font=("Helvetica", 16),
+            font=("Helvetica", 10),
             bg=['#ED6868']
         )
         textlabel.pack()
@@ -583,8 +581,6 @@ class MEDpress(object):
         
 
 if __name__ == "__main__":
-    try: win32api.LoadKeyboardLayout('00000409',1)
-    except: pass
     root = tk.Tk()
     root.geometry("1300x900")
     root.call('encoding', 'system', 'utf-8')
