@@ -586,7 +586,8 @@ if __name__ == "__main__":
     root.call('encoding', 'system', 'utf-8')
     try:
         root.iconbitmap('icon.ico')
-    except:
         root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='icon.ico'))
+    except:
+        pass
     app = MEDpress(root)
     root.mainloop()
