@@ -18,6 +18,9 @@ if sys.platform == "win32":
 if sys.platform == "linux":
     appName = "medpress"
 
+if sys.platform == "darwin":
+    appName = 'medpress'
+
 executable = [
     Executable(
         "main.py",
