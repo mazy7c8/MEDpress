@@ -11,16 +11,20 @@ class vardrawing(tk.Widget):
         else: self.vartype=vartype
         self.posx=posx
         self.posy=posy
-        self.extra=vartype[1:]
+        if type(vartype)==list:
+            self.extra=vartype[1:]
+        else:
+            self.extra=[]
         self.tmpdict=tmpdict
 
         if vartype=="if":
             #print(type(tmpdict[name]))
             if type(tmpdict[name])==list:
                 self.vartype=tmpdict[name][0]
+                self.extra=tmpdict[name][1:]
             else:
                 self.vartype=tmpdict[name]
-            self.extra=tmpdict[name][1:]
+                self.extra=[]
 
 
     def drawheading(self):
