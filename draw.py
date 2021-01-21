@@ -129,6 +129,9 @@ class vardrawing(tk.Widget):
                 elif new.vartype=="DT":
                     extravals.append(newvals)
                     bodies.extend(newbodies)
+                elif new.vartype=="RC":
+                    extravals.append(newvals)
+                    bodies.extend(newbodies)
                 elif new.vartype=="TN": ##todo if+TN
                     extravals.append(newvals)
                     bodies.extend(newbodies)

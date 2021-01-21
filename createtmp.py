@@ -9,6 +9,8 @@ import json
 from idlelib.tooltip import Hovertip
 import re
 import ast
+import traceback, sys
+from tkinter import messagebox, Toplevel,Label,Button
 
 
 def template_window(self,template):
@@ -85,11 +87,23 @@ NB = widżet liczby"""
 
         if self.varaction==True:
             #ListItem.writeVars(template,value4,value2)
-            template.dictionary=ast.literal_eval(value4)
-            template.header=value4
-            writeToFile(template,value4,template.body)
-            print("varaction")
+            try:
+                template.dictionary=ast.literal_eval(value4)    
+                template.header=value4
+                writeToFile(template,value4,template.body)
+                print("varaction")
 
+            except SyntaxError as e:
+                error = traceback.format_exc()
+                #messagebox.showinfo("blad skladni", error)
+                window = Toplevel()
+
+                label = Label(window, text=error, font="Consolas 10",justify=LEFT)
+                label.pack(fill='x', padx=20, pady=100)
+
+                button_close = Button(window, text="Zamknij", command=window.destroy,)
+                button_close.pack(fill='x')
+                button_close.config(bg='red')
         
         if self.nameaction==True:
             ListItem.updateName(template,value)

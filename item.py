@@ -36,7 +36,7 @@ class ListItem(object):
             for item in schema.keys():
                 schema.__setitem__(item,"TX")
 
-            with open(os.path.join("szablony",name+".txt"),'r+') as f:
+            with open(os.path.join("szablony",name+".txt"),'r+',encoding='utf-8') as f:
                 f.seek(0, 0)
                 firstline = f.readline()
                 if firstline.startswith('###') or firstline.startswith('{'):
