@@ -472,14 +472,14 @@ class MEDpress(object):
                     verticalpos+=20*len(template.dictionary[item][2:])
                 if template.dictionary[item]=="DT" or template.dictionary[item][0]=="DT":
                     verticalpos+=15
-                if template.dictionary[item][0]=="TN":
+                if template.dictionary[item]=="TN":
                     verticalpos+=30
                 if template.dictionary[item][0]=="NB":
                     verticalpos+=15
                 if template.dictionary[item][0]=="IF":
                     passing = template.dictionary[item][2]
                     length = template.dictionary[passing][1:]
-                    verticalpos+=30+20*len(length)
+                    verticalpos+=10+20*(len(length)-1)
                 if template.dictionary[item][0]=="RC":
                     verticalpos+=20*len(template.dictionary[item][2:])
                 
@@ -527,7 +527,7 @@ class MEDpress(object):
         self.endworkbutton.config(bg="#00FF00")
         root.after(100, lambda: self.endworkbutton.config(bg='lightgrey'))
         readed = {}
-        print(self.entryBoxList)
+        #print(self.entryBoxList)
         for keys,values in self.entryBoxList.items():
             try:
                 if type(values) is list:

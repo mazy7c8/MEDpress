@@ -137,7 +137,7 @@ class vardrawing(tk.Widget):
                     extravals.append(newvals)
                     bodies.extend(newbodies)
                 elif new.vartype=="TN": ##todo if+TN
-                    extravals.extend(newvals)
+                    extravals.append(newvals)
                     bodies.extend(newbodies)
                 elif new.vartype=="NB": ##todo if+NB
                     increment=40
@@ -212,29 +212,22 @@ class vardrawing(tk.Widget):
         
         if self.vartype=="TN":
             bodies=[]
-            extravals=[]
 
             var = tk.StringVar()
-            try: 
-                var.set(self.extra[1])
-            except:
-                var.set('Tak')
-
-            varFalse = tk.StringVar()
-            try:
-                varFalse.set(self.extra[2])
-            except:
-                varFalse.set('Nie')
-
+            var.set('')
+      
             def destroyVars():
-                extravals.clear()
+                var.set('')
                 for body in bodies[3:]:
                     body.destroy()
 
 
             def returnPositive():
-                extravals.clear()
-                extravals.append(var)
+                try: 
+                    var.set(self.extra[1])
+                except:
+                    var.set('Tak')
+
                 body3 = tk.Button(
                         self.window,
                         text="zrezygnuj",
@@ -245,8 +238,10 @@ class vardrawing(tk.Widget):
                 bodies.append(body3)
 
             def returnNegative():
-                extravals.clear()
-                extravals.append(varFalse)
+                try:
+                    var.set(self.extra[2])
+                except:
+                    var.set('Nie')
                 body3 = tk.Button(
                         self.window,
                         text="zrezygnuj",
@@ -299,7 +294,7 @@ class vardrawing(tk.Widget):
             body2.place(x=self.posx+150, y=self.posy, height=20, width=150)
             bodies.append(body2)
 
-            return extravals, bodies
+            return var, bodies
 
         if self.vartype=="DT":
             bodies=[]
