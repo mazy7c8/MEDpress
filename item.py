@@ -5,6 +5,7 @@ import re
 from tkinter import messagebox, Toplevel,Label,Button
 from tkinter.constants import LEFT
 import traceback, sys
+from typing import Type
 from jinja2schema import infer, to_json_schema
 import ast
 
@@ -16,6 +17,8 @@ class ListItem(object):
         self.source=name
         self.author=self.readAuthor()
         self.dictionary=self.makeDict(self.name)
+        self.header=readHeader(self,self.name)
+        self.body=readBody(self,self.name)
 
     def updateInstance(self,name,date,source):
         self.name=name.rstrip(".txt")
@@ -158,13 +161,46 @@ def readTemplate(template):
     #data.readline()
     return data.read()
 
-def readWithooutHeader(template):
-    data=open(os.path.join("szablony",template.name+".txt"),"r",encoding="utf-8")
-    readed = data.read()
-    stripped = re.search(r'\n\n.*', readed)
-    if readed:
-        stripped = re.sub(r'^$\n', '', stripped.group(0), flags=re.MULTILINE)
-        return stripped
-    else:
-        return data.read()
+def readHeader(template,name):
+    if name!="":
+        try:
+            data=open(os.path.join("szablony",template.name+".txt"),"r",encoding="utf-8")
+        except FileNotFoundError:
+            data=open(os.path.join("szablony",name+".txt"),"r",encoding="utf-8")
+
+        readed=data.read()
+        data.seek(0,0)
+        firstline=data.readline()
+        if firstline.startswith('###'):
+            stripped = re.search(r'###.*\n', readed)
+            return stripped.group(0)
+        else:
+            return ''
+            
+
+def readBody(template,name):
+    if name!="":
+        try:
+            data=open(os.path.join("szablony",template.name+".txt"),"r",encoding="utf-8")
+        except FileNotFoundError:
+            data=open(os.path.join("szablony",name+".txt"),"r",encoding="utf-8")
+
+        readed = data.read()
+        data.seek(0, 0)
+        firstline = data.readline()
+        if firstline.startswith('###') or firstline.startswith('{'):
+            stripped = re.search(r'\n\n.*', readed)
+            stripped = re.sub(r'^$\n', '', stripped.group(0), flags=re.MULTILINE)
+            return stripped
+        else:
+            return readed
+
+
+def writeToFile(template,header,body):
+    with open(os.path.join("szablony",template.name+".txt"),'r+',encoding="utf-8") as f:
+            f.truncate(0)
+            f.seek(0,0)
+            whole = header+'\n'+body
+            f.write(whole)
+            f.close()
 

@@ -1,12 +1,14 @@
+from os import write
 import tkinter as tk
 from tkinter import font
 from tkinter.constants import LEFT
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
-from item import ListItem, readTemplate, readWithooutHeader
+from item import ListItem, readHeader, readTemplate, readBody, writeToFile
 import json
 from idlelib.tooltip import Hovertip
 import re
+import ast
 
 
 def template_window(self,template):
@@ -76,11 +78,16 @@ NB = widżet liczby"""
         
         if self.textaction==True: 
             #ListItem.updateText(template,value3)
-            template.updateText(value3)
+            #template.updateText(value3)
+            template.body=value3
+            writeToFile(template,template.header,value3)
             print("textaction")
 
         if self.varaction==True:
-            ListItem.writeVars(template,value4,value2)
+            #ListItem.writeVars(template,value4,value2)
+            template.dictionary=ast.literal_eval(value4)
+            template.header=value4
+            writeToFile(template,value4,template.body)
             print("varaction")
 
         
@@ -150,15 +157,13 @@ NB = widżet liczby"""
         self.window,
         bg='white',
     )
-    try:
-        plaincode = readTemplate(template)
-        #plaincode = readWithooutHeader(template)
-        #stripped = re.search(r'\n.*?',plaincode)
-        #stripped = re.sub(r'^$\n', '', stripped.group(0), flags=re.MULTILINE)
 
+    try:
+        plaincode = readBody(template,None)
         textcode.insert(INSERT,plaincode)
     except:
-        pass
+        plaincode = readTemplate(template)
+        textcode.insert(INSERT,plaincode)
 
     textcode.pack()
     textcode.place(y=144, x=36, height=481, width=226)
