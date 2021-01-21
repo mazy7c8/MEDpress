@@ -39,7 +39,7 @@ class ListItem(object):
             with open(os.path.join("szablony",name+".txt"),'r+') as f:
                 f.seek(0, 0)
                 firstline = f.readline()
-                if firstline.startswith('###'):
+                if firstline.startswith('###') or firstline.startswith('{'):
                     hardcodeddict = re.search(r'(?<=\{)(.*?)(?=\})',firstline)
                     if hardcodeddict != None:
                         decodeddict = dict(ast.literal_eval('{'+hardcodeddict.group()+'}'))
@@ -200,7 +200,7 @@ def writeToFile(template,header,body):
     with open(os.path.join("szablony",template.name+".txt"),'r+',encoding="utf-8") as f:
             f.truncate(0)
             f.seek(0,0)
-            whole = header+'\n'+body
+            whole ='### '+header+'\n'+body
             f.write(whole)
             f.close()
 

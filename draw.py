@@ -15,8 +15,8 @@ class vardrawing(tk.Widget):
         self.tmpdict=tmpdict
 
         if vartype=="if":
-            #print(type(vartype))
-            if type(vartype)==str: ##todo [] and '' encapsulation
+            #print(type(tmpdict[name]))
+            if type(tmpdict[name])==list:
                 self.vartype=tmpdict[name][0]
             else:
                 self.vartype=tmpdict[name]
@@ -126,6 +126,9 @@ class vardrawing(tk.Widget):
                 if new.vartype=="CB":
                     extravals.extend(newvals)
                     bodies.extend(newbodies)
+                elif new.vartype=="DT":
+                    extravals.append(newvals)
+                    bodies.extend(newbodies)
                 elif new.vartype=="TN": ##todo if+TN
                     extravals.append(newvals)
                     bodies.extend(newbodies)
@@ -135,7 +138,7 @@ class vardrawing(tk.Widget):
                     bodies.extend(newbodies)
                 else:
                     extravals.append(newvals)
-                    bodies.extend(newbodies)
+                    #bodies.extend(newbodies)
 
                 body3 = tk.Button(
                 self.window,
