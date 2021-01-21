@@ -137,7 +137,7 @@ class vardrawing(tk.Widget):
                     extravals.append(newvals)
                     bodies.extend(newbodies)
                 elif new.vartype=="TN": ##todo if+TN
-                    extravals.append(newvals)
+                    extravals.extend(newvals)
                     bodies.extend(newbodies)
                 elif new.vartype=="NB": ##todo if+NB
                     increment=40
@@ -215,10 +215,16 @@ class vardrawing(tk.Widget):
             extravals=[]
 
             var = tk.StringVar()
-            var.set(self.extra[1])
+            try: 
+                var.set(self.extra[1])
+            except:
+                var.set('Tak')
 
             varFalse = tk.StringVar()
-            varFalse.set(self.extra[2])
+            try:
+                varFalse.set(self.extra[2])
+            except:
+                varFalse.set('Nie')
 
             def destroyVars():
                 extravals.clear()
@@ -252,15 +258,27 @@ class vardrawing(tk.Widget):
 
             self.posy+=20
 
-            question = tk.Label(
-                    self.window,
-                    text=self.extra[0],
-                    font=("Helvetica", 16),
-                    bg='yellow'
-                )
-            question.pack()
-            question.place(x=self.posx, y=self.posy, height=20, width=300)
-            bodies.append(question)
+            try:
+                question = tk.Label(
+                        self.window,
+                        text=self.extra[0],
+                        font=("Helvetica", 16),
+                        bg='yellow'
+                    )
+                question.pack()
+                question.place(x=self.posx, y=self.posy, height=20, width=300)
+                bodies.append(question)
+            except IndexError:
+                question = tk.Label(
+                        self.window,
+                        text="Generyczna zmienna",
+                        font=("Helvetica", 16),
+                        bg='yellow'
+                    )
+                question.pack()
+                question.place(x=self.posx, y=self.posy, height=20, width=300)
+                bodies.append(question)
+
 
             self.posy+=20
             body = tk.Button(
@@ -365,15 +383,27 @@ class vardrawing(tk.Widget):
         if self.vartype=="NB":
             self.posy+=20
 
-            sc = tk.Scale(
-                self.window,
-                orient="horizontal",
-                from_=self.extra[0],
-                to=self.extra[1]
-            )
-            sc.pack()
-            sc.place(x=self.posx, y=self.posy, height=40, width=300)
-            return sc, sc
+            try:
+                sc = tk.Scale(
+                    self.window,
+                    orient="horizontal",
+                    from_=self.extra[0],
+                    to=self.extra[1]
+                )
+                sc.pack()
+                sc.place(x=self.posx, y=self.posy, height=40, width=300)
+                return sc, sc
+            except IndexError:
+                sc = tk.Scale(
+                    self.window,
+                    orient="horizontal",
+                    from_=69,
+                    to=666
+                )
+                sc.pack()
+                sc.place(x=self.posx, y=self.posy, height=40, width=300)
+                return sc, sc
+
         
         else:
             body = tk.Label(

@@ -527,7 +527,7 @@ class MEDpress(object):
         self.endworkbutton.config(bg="#00FF00")
         root.after(100, lambda: self.endworkbutton.config(bg='lightgrey'))
         readed = {}
-        #print(self.entryBoxList)
+        print(self.entryBoxList)
         for keys,values in self.entryBoxList.items():
             try:
                 if type(values) is list:
