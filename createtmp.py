@@ -4,7 +4,7 @@ from tkinter import font
 from tkinter.constants import LEFT
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
-from item import ListItem, readHeader, readTemplate, readBody, writeToFile
+from item import ListItem, readHeader, readTemplate, readBody, writeToFile,writeAuthor2
 import json
 from idlelib.tooltip import Hovertip
 import re
@@ -89,7 +89,8 @@ NB = widżet liczby"""
             #ListItem.writeVars(template,value4,value2)
             try:
                 template.dictionary=ast.literal_eval(value4)    
-                template.header=value4
+                oldheader = re.sub(r'{.*}'," ",template.header)
+                newheader = oldheader + value4
                 writeToFile(template,value4,template.body)
                 print("varaction")
 
@@ -110,8 +111,10 @@ NB = widżet liczby"""
             print("nameaction")
 
         if self.authoraction==True:
+            newheader = writeAuthor2(template,template.header,value2)
+            writeToFile(template,newheader,template.body)
             print("authoraction")
-            ListItem.writeAuthor(template,value2)
+            #ListItem.writeAuthor(template,value2)
 
     def textAction():
         self.textaction=True

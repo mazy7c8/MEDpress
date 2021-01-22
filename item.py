@@ -197,10 +197,27 @@ def readBody(template,name):
 
 
 def writeToFile(template,header,body):
+    template.body=body
+    template.header=header
+    
     with open(os.path.join("szablony",template.name+".txt"),'r+',encoding="utf-8") as f:
             f.truncate(0)
             f.seek(0,0)
             whole ='### '+header+'\n'+body
             f.write(whole)
             f.close()
+
+def writeAuthor2(template,header,variable):
+    template.author=variable
+
+    header = header.lstrip("# ")
+
+    if re.search("author=(\w+)",header):
+        newheader = re.sub('author=[a-z]*',"author="+variable,header)
+    else:
+        print("niema")
+        newheader = "author=" + variable + " " + header
+
+    return newheader
+
 
