@@ -81,7 +81,6 @@ NB = widżet liczby"""
         if self.textaction==True: 
             #ListItem.updateText(template,value3)
             #template.updateText(value3)
-            template.body=value3
             writeToFile(template,template.header,value3)
             print("textaction")
 
