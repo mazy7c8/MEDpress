@@ -89,9 +89,9 @@ NB = widżet liczby"""
             #ListItem.writeVars(template,value4,value2)
             try:
                 template.dictionary=ast.literal_eval(value4)    
-                oldheader = re.sub(r'{.*}'," ",template.header)
-                newheader = oldheader + value4
-                writeToFile(template,value4,template.body)
+                oldheader = re.sub(r'{.*}',"",template.header)
+                newheader = oldheader.rstrip('\n') + value4.rstrip('\n')
+                writeToFile(template,newheader,template.body)
                 print("varaction")
 
             except SyntaxError as e:
@@ -173,6 +173,7 @@ NB = widżet liczby"""
     textcode = tk.Text(
         self.window,
         bg='white',
+        font=('Consolas',12),
     )
 
     try:
@@ -198,6 +199,7 @@ NB = widżet liczby"""
     texttemplate = tk.Text(
         self.window,
         bg='white',
+        font=('Consolas',10),
     )
     try:
         texttemplate.insert(INSERT,template.dictionary)

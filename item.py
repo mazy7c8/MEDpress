@@ -189,9 +189,12 @@ def readBody(template,name):
         data.seek(0, 0)
         firstline = data.readline()
         if firstline.startswith('###') or firstline.startswith('{'):
-            stripped = re.search(r'\n\n.*', readed)
-            stripped = re.sub(r'^$\n', '', stripped.group(0), flags=re.MULTILINE)
-            return stripped
+            try:
+                stripped = re.search(r'\n\n.*', readed)
+                stripped = re.sub(r'^$\n', '', stripped.group(0), flags=re.MULTILINE)
+                return stripped
+            except:
+                return readed
         else:
             return readed
 
@@ -203,14 +206,14 @@ def writeToFile(template,header,body):
     with open(os.path.join("szablony",template.name+".txt"),'r+',encoding="utf-8") as f:
             f.truncate(0)
             f.seek(0,0)
-            whole ='### '+header+'\n'+body
+            whole ='### '+header+'\n'+'\n'+body
             f.write(whole)
             f.close()
 
 def writeAuthor2(template,header,variable):
     template.author=variable
 
-    header = header.lstrip("# ")
+    #header = header.lstrip("# ")
 
     if re.search("author=(\w+)",header):
         newheader = re.sub('author=[a-z]*',"author="+variable,header)
