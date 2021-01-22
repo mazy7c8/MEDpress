@@ -89,7 +89,8 @@ NB = widżet liczby"""
             try:
                 template.dictionary=ast.literal_eval(value4)    
                 oldheader = re.sub(r'{.*}',"",template.header)
-                newheader = oldheader.rstrip('\n') + value4.rstrip('\n')
+                #newheader = oldheader.rstrip('\n') + value4.rstrip('\n')\
+                newheader = oldheader.rstrip('\n') + json.dumps(template.dictionary)
                 writeToFile(template,newheader,template.body)
                 print("varaction")
 
@@ -201,7 +202,8 @@ NB = widżet liczby"""
         font=('Consolas',10),
     )
     try:
-        texttemplate.insert(INSERT,template.dictionary)
+        jsonstring = json.dumps(template.dictionary,indent=1)
+        texttemplate.insert(INSERT,jsonstring)
 
     except: 
         pass

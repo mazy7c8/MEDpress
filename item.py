@@ -53,7 +53,7 @@ class ListItem(object):
                                 decodeddict[item]="TX"
                             return decodeddict
             
-            return schema
+            return dict(schema)
         pass
 
     def updateName(self,var):
