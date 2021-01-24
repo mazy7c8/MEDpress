@@ -1,5 +1,14 @@
-### author=nieznany {'imie': ['IF', 'czy jesz bigos', 'ifowa'], 'od1do10': ['TX', 'lubisz pierogi', 'tak lubie', 'nie lubie'], 'ifowa': ['TX', 'dasda', 'dasda2']}
+### author=admin {"czesc": ["RC","czolowa","skroniowa","potyliczna"],"data": "DT","imie": "TX","nazwisko": "TX","przyczyna": ["SB","wypadek komunikacyjny","zaburzenia krazenia","bez przyczyny"],"skala":["NB","1","10"],"uraz": ["TN","czy doznal urazu","doznal urazu","nie doznal urazu"],"uwagi": ["IF","dodatkowe uwagi","dodatkowe"],"dodatkowe": ["TX"],"czywypis": ["TN","czy hospitalizacja","data wypisu ze szpitala","Pacjent bez hospitalizacji"],"datawypisu": ["IF","data wypisu?","data2"],"data2": ["DT"],"koniec": "TX"}
 
-Pacjenta {{ imie }} boli glowa w skali od 1 do 10 na {{ od1do10 }}
+Pacjenta {{ imie }} {{nazwisko}} boli glowa w skali od 1 do 10 na {{skala}}. Ból zaczął się w dniu {{data}}. Pacjenta boli część {{czesc}}. Pacjent {{uraz}} urazu z powodu {{przyczyna}}.  Dodatkowe uwagi :{{uwagi}}. {{czywypis}} {{datawypisu}} {{koniec}}
+
+
+
+
+
+
+
+
+
 
 

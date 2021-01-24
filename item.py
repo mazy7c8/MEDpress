@@ -202,6 +202,8 @@ def readBody(template,name):
 def writeToFile(template,header,body):
     template.body=body
     template.header=header
+
+    header.lstrip("# ")
     
     with open(os.path.join("szablony",template.name+".txt"),'r+',encoding="utf-8") as f:
             f.truncate(0)
