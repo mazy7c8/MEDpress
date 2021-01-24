@@ -223,4 +223,35 @@ def writeAuthor2(template,header,variable):
 
     return newheader
 
+def generateNewVars(template,textfield):
+    old = template.dictionary
+    
+    ordered = []
+    for m in  re.finditer(r'\{\{\s*(\w+)\s*\}\}',textfield):
+        ordered.append(m.group(1))
+    
+    new = dict.fromkeys(ordered ,"TX")
+
+    added = set(new) - set(old)
+    removed = set(old) - set(new)
+    if list(added):
+        print("added")
+        for item in added:
+            template.dictionary[item]="TX"
+        return template.dictionary
+    elif list(removed):
+        print("removed")
+        for item in removed:
+            del template.dictionary[item]
+        return template.dictionary
+    else:
+        print("no changes")
+        return template.dictionary
+
+    
+
+
+
+
+
 

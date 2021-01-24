@@ -4,7 +4,7 @@ from tkinter import font
 from tkinter.constants import LEFT
 import tkinter.ttk as ttk
 from tkinter import Canvas, Frame, INSERT, END
-from item import ListItem, readHeader, readTemplate, readBody, writeToFile,writeAuthor2
+from item import ListItem, readHeader, readTemplate, readBody, writeToFile,writeAuthor2,generateNewVars
 import json
 from idlelib.tooltip import Hovertip
 import re
@@ -245,6 +245,12 @@ NB = widżet liczby"""
         #self.varaction=True
         #aveValues()
 
+    def generateVars2():
+        newout = generateNewVars(template,textcode.get(1.0,END))
+        texttemplate.delete('1.0', END)
+        jsonstring = json.dumps(newout,indent=1,ensure_ascii=False).encode('utf8')
+        texttemplate.insert(INSERT,jsonstring.decode())
+
 
 
     generatebutton = tk.Button(
@@ -253,7 +259,7 @@ NB = widżet liczby"""
         width=10,
         height=2,
         bg="lightgrey",
-        command=generateVars
+        command=generateVars2
     )
     generatebutton.pack()
     generatebutton.place(x=36, y=630)
