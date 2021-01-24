@@ -146,7 +146,10 @@ class ListItem(object):
 
 
 def readFolder():
-    file_list = os.listdir("szablony")
+    try:
+        file_list = os.listdir("szablony")
+    except FileNotFoundError:
+        os.mkdir("szablony")
     data=()
 
     for file_name in file_list:

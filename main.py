@@ -161,7 +161,11 @@ class MEDpress(object):
         self.tree.place(x=44, y=251, height=633, width=382)
         self.tree.bind('<ButtonRelease-1>', self.updateTextfieldFromClick)
         self.tree.bind('<Return>', self.updateTextfieldFromClick)
-        child_id = self.tree.get_children()[0]
+        try:
+            child_id = self.tree.get_children()[0]
+        except IndexError:
+            self.tree.insert('', 'end', 'ID{0}'.format(number), text="Brak szablonow", values=("w folderze szablony", "00:00:00"))
+            child_id = self.tree.get_children()[0]
         self.tree.focus_set()
         self.tree.focus(child_id)
         self.tree.selection_set(child_id)
