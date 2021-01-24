@@ -176,7 +176,7 @@ def readHeader(template,name):
         firstline=data.readline()
         if firstline.startswith('###'):
             stripped = re.search(r'###.*\n', readed)
-            return stripped.group(0)
+            return stripped.group(0).strip()
         else:
             return ''
             
@@ -195,19 +195,20 @@ def readBody(template,name):
             try:
                 stripped = re.search(r'\n\n.*', readed)
                 stripped = re.sub(r'^$\n', '', stripped.group(0), flags=re.MULTILINE)
-                return stripped
+                return stripped.strip()
             except:
-                return readed
+                return readed.strip()
         else:
-            return readed
+            return readed.strip()
 
 
 def writeToFile(template,header,body):
+    header.lstrip('###')
+    header.strip()
+    body.strip()
     template.body=body
     template.header=header
 
-    header.lstrip("# ")
-    
     with open(os.path.join("szablony",template.name+".txt"),'r+',encoding="utf-8") as f:
             f.truncate(0)
             f.seek(0,0)

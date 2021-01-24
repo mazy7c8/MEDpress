@@ -81,7 +81,7 @@ NB = widżet liczby"""
         if self.textaction==True: 
             #ListItem.updateText(template,value3)
             #template.updateText(value3)
-            writeToFile(template,template.header,value3)
+            writeToFile(template,template.header.lstrip("# "),value3)
             print("textaction")
 
         if self.varaction==True:
@@ -91,7 +91,7 @@ NB = widżet liczby"""
                 oldheader = re.sub(r'{.*}',"",template.header)
                 #newheader = oldheader.rstrip('\n') + value4.rstrip('\n')
                 newdict = json.dumps(template.dictionary,ensure_ascii=False).encode('utf-8')
-                newheader = oldheader.rstrip('\n') + newdict.decode()
+                newheader = oldheader.lstrip("# ") + newdict.decode()
                 writeToFile(template,newheader,template.body)
                 print("varaction")
 
