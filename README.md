@@ -48,3 +48,5 @@ Project is now waiting for test users and feedback to get pushed for new release
 My active email is rafalinz at gmail dot com
 
 ## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
