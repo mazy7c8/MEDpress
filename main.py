@@ -593,5 +593,11 @@ if __name__ == "__main__":
         root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='icon.ico'))
     except:
         pass
+    try:
+        img = tk.Image("photo", file="icon.png")
+        root.tk.call('wm', 'iconphoto', root._w, img)
+    except:
+        pass
+   
     app = MEDpress(root)
     root.mainloop()
