@@ -236,11 +236,16 @@ def generateNewVars(template,textfield):
     old = template.dictionary
 
     protected = []
-    for item in old:
-        if old[item][0]=="IF":
-            protected.append(old[item][2])
+    try:
+        for item in old:
+            if old[item][0]=="IF":
+                protected.append(old[item][2])
 
-    old = set(old)-set(protected)
+        old = set(old)-set(protected)
+    except TypeError:
+        old = {}
+        template.dictionary={}
+
     
     ordered = []
     for m in  re.finditer(r'\{\{\s*(\w+)\s*\}\}',textfield):

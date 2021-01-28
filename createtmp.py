@@ -32,6 +32,10 @@ def template_window(self,template):
     if template.name== '':
         print("loaded dummy")
         self.dummytemplate=True
+        template.dictionary={}
+        template.header=""
+        template.body=""
+
 
     legend = """TX = standardowa
 zmienna tekstowa
@@ -91,6 +95,7 @@ NB = widżet liczby"""
                 txttime = time.ctime(os.path.getctime(f.name))
                 f.close()
                 createdTemplate = ListItem(value,txttime,name)
+                #createdTemplate.dictionary={"brak":"zmiennych"}
                 #template.updateInstance(value,txttime,value)
                 
             else:
@@ -113,13 +118,19 @@ NB = widżet liczby"""
         if self.varaction==True:
             #ListItem.writeVars(template,value4,value2)
             try:
-                template.dictionary=ast.literal_eval(value4)    
-                oldheader = re.sub(r'{.*}',"",template.header)
-                #newheader = oldheader.rstrip('\n') + value4.rstrip('\n')
-                newdict = json.dumps(template.dictionary,ensure_ascii=False).encode('utf-8')
-                newheader = oldheader.lstrip("# ") + newdict.decode()
-                writeToFile(template,newheader,template.body)
-                print("varaction")
+                if self.dummytemplate==True:
+                    createdTemplate.dictionary=ast.literal_eval(value4) 
+                    newdict = json.dumps(createdTemplate.dictionary,ensure_ascii=False).encode('utf-8')
+                    newheader = newdict.decode()
+                    writeToFile(createdTemplate,newheader,createdTemplate.body)
+                else:
+                    template.dictionary=ast.literal_eval(value4)    
+                    oldheader = re.sub(r'{.*}',"",template.header)
+                    #newheader = oldheader.rstrip('\n') + value4.rstrip('\n')
+                    newdict = json.dumps(template.dictionary,ensure_ascii=False).encode('utf-8')
+                    newheader = oldheader.lstrip("# ") + newdict.decode()
+                    writeToFile(template,newheader,template.body)
+                    print("varaction")
 
             except SyntaxError as e:
                 error = traceback.format_exc()
