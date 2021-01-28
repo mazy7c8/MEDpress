@@ -160,7 +160,10 @@ def readFolder():
     return data
 
 def readTemplate(template):
-    data = open(os.path.join("szablony",template.name+".txt"),"r",encoding="utf-8")
+    try:
+        data = open(os.path.join("szablony",template.name+".txt"),"r",encoding="utf-8")
+    except FileNotFoundError:
+        return ""
     #data.readline()
     return data.read()
 

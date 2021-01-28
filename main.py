@@ -334,14 +334,19 @@ class MEDpress(object):
     def refreshTmpList(self):
         self.tree.delete(*self.tree.get_children())
 
-        #self.templateStack.clear()
-
         datafromfolder = readFolder()
+
         #print(self.templateStack, self.found)
-        result = zip(datafromfolder,self.templateStack)
-        for data, instance in list(result):
-            instance.updateInstance(data[1], data[2], data[0])
-            #self.templateStack.append(nowe)
+        # result = zip(datafromfolder,self.templateStack)
+        # for data, instance in list(result):
+        #     instance.updateInstance(data[1], data[2], data[0])
+        #     #self.templateStack.append(nowe)
+        
+        self.templateStack.clear()
+        
+        for source, name, time in datafromfolder:
+            testowe = ListItem(name, time, source)
+            self.templateStack.append(testowe)
         
         number = 0
         for cos in self.templateStack:

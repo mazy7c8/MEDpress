@@ -11,6 +11,7 @@ import re
 import ast
 import traceback, sys
 from tkinter import messagebox, Toplevel,Label,Button
+import time, os
 
 
 def template_window(self,template):
@@ -26,6 +27,11 @@ def template_window(self,template):
     self.varaction=False
     self.nameaction=False
     self.authoraction=False
+    self.dummytemplate=False
+
+    if template.name== '':
+        print("loaded dummy")
+        self.dummytemplate=True
 
     legend = """TX = standardowa
 zmienna tekstowa
@@ -77,11 +83,31 @@ NB = widżet liczby"""
         value2 = authorentry.get()
         value3 = textcode.get(1.0,END)
         value4 = texttemplate.get(1.0,END)
+
+        if self.nameaction==True:
+            if self.dummytemplate==True:
+                name=str(value)+".txt"
+                f= open("szablony/"+name,"w+")
+                txttime = time.ctime(os.path.getctime(f.name))
+                f.close()
+                createdTemplate = ListItem(value,txttime,name)
+                #template.updateInstance(value,txttime,value)
+                
+            else:
+                ListItem.updateName(template,value)
+            print("nameaction")
+
         
         if self.textaction==True: 
             #ListItem.updateText(template,value3)
             #template.updateText(value3)
-            writeToFile(template,template.header.lstrip("# "),value3)
+            if self.dummytemplate==True:
+                createdTemplate.header=""
+                writeToFile(createdTemplate,createdTemplate.header.lstrip("# "),value3)
+            else:
+                writeToFile(template,template.header.lstrip("# "),value3)
+
+
             print("textaction")
 
         if self.varaction==True:
@@ -107,10 +133,7 @@ NB = widżet liczby"""
                 button_close.pack(fill='x')
                 button_close.config(bg='red')
         
-        if self.nameaction==True:
-            ListItem.updateName(template,value)
-            print("nameaction")
-
+        
         if self.authoraction==True:
             newheader = writeAuthor2(template,template.header,value2)
             writeToFile(template,newheader,template.body)
