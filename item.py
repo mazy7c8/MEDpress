@@ -16,42 +16,48 @@ class ListItem(object):
         self.date=date
         self.source=name
         self.author=self.readAuthor()
-        self.dictionary=self.makeDict(self.name)
-        self.header=readHeader(self,self.name)
-        self.body=readBody(self,self.name)
+        self.dictionary=self.makeDict(self.name,source)
+        self.header=readHeader(self,self.name,source)
+        self.body=readBody(self,self.name,source)
 
     def updateInstance(self,name,date,source):
         self.name=name.rstrip(".txt")
         self.abbr=name[0:4]
         self.date=date
-        self.source=name
+        self.source=source
 
 
-    def makeDict(self,name):
+    def makeDict(self,name,source=None):
         if name!="":
-            data = open(os.path.join("szablony",name+".txt"),"r",encoding="utf-8")
+            try:
+                data = open(os.path.join("szablony",name+".txt"),"r",encoding="utf-8")
+            except FileNotFoundError:
+                data = open(os.path.join(source),"r",encoding="utf-8")
             plaincode = data.read()
             schema = infer(plaincode)
             #schema = (json.dumps(schema,indent=3))
             for item in schema.keys():
                 schema.__setitem__(item,"TX")
 
-            with open(os.path.join("szablony",name+".txt"),'r+',encoding='utf-8') as f:
-                f.seek(0, 0)
-                firstline = f.readline()
-                if firstline.startswith('###') or firstline.startswith('{'):
-                    hardcodeddict = re.search(r'(?<=\{)(.*?)(?=\})',firstline)
-                    if hardcodeddict != None:
-                        decodeddict = dict(ast.literal_eval('{'+hardcodeddict.group()+'}'))
-                        diff = set(schema.keys()) - set(decodeddict.keys())
-                        #print(diff,list(diff))
-                        if not list(diff):
-                            return decodeddict
-                        else: 
-                            print('dodano zmnienno')
-                            for item in diff:
-                                decodeddict[item]="TX"
-                            return decodeddict
+            try:
+                f = open(os.path.join("szablony",name+".txt"),'r+',encoding='utf-8')
+            except FileNotFoundError:
+                f = open(os.path.join(source),'r+',encoding='utf-8')
+            f.seek(0, 0)
+            firstline = f.readline()
+            if firstline.startswith('###') or firstline.startswith('{'):
+                hardcodeddict = re.search(r'(?<=\{)(.*?)(?=\})',firstline)
+                if hardcodeddict != None:
+                    decodeddict = dict(ast.literal_eval('{'+hardcodeddict.group()+'}'))
+                    diff = set(schema.keys()) - set(decodeddict.keys())
+                    #print(diff,list(diff))
+                    if not list(diff):
+                        return decodeddict
+                    else: 
+                        print('dodano zmnienno')
+                        for item in diff:
+                            decodeddict[item]="TX"
+                        return decodeddict
             
             return dict(schema)
         pass
@@ -167,12 +173,12 @@ def readTemplate(template):
     #data.readline()
     return data.read()
 
-def readHeader(template,name):
+def readHeader(template,name,source=None):
     if name!="":
         try:
             data=open(os.path.join("szablony",template.name+".txt"),"r",encoding="utf-8")
         except FileNotFoundError:
-            data=open(os.path.join("szablony",name+".txt"),"r",encoding="utf-8")
+            data=open(os.path.join(source),"r",encoding="utf-8")
 
         readed=data.read()
         data.seek(0,0)
@@ -184,12 +190,12 @@ def readHeader(template,name):
             return ''
             
 
-def readBody(template,name):
+def readBody(template,name,source=None):
     if name!="":
         try:
             data=open(os.path.join("szablony",template.name+".txt"),"r",encoding="utf-8")
         except FileNotFoundError:
-            data=open(os.path.join("szablony",name+".txt"),"r",encoding="utf-8")
+            data=open(os.path.join(source),"r",encoding="utf-8")
 
         readed = data.read()
         data.seek(0, 0)

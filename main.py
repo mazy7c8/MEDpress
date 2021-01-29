@@ -2,16 +2,20 @@ from subprocess import CalledProcessError
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.font as tf
-from tkinter import Canvas, Event, Frame, INSERT, END, PhotoImage
+from tkinter import Canvas, Event, Frame, INSERT, END, PhotoImage, filedialog
+
+from jinja2.loaders import BaseLoader
 from createtmp import template_window
-from item import ListItem, readFolder, readTemplate
+from item import ListItem, readFolder, readTemplate, readBody
 from jinja2 import Template, Environment, FileSystemLoader, select_autoescape, meta
 from jinja2schema import infer, model, config
 import subprocess
 import re
 import time
+import os
 from draw import vardrawing
 from idlelib.tooltip import Hovertip
+import ntpath
 
 class MEDpress(object):        
     def __init__(self, parent):
@@ -30,6 +34,7 @@ class MEDpress(object):
         self.found = ListItem
 
         self.templateStack = []
+        self.fromFileStack = []
 
         self.dummyTemplate = ListItem('','','')
 
@@ -75,7 +80,8 @@ class MEDpress(object):
             width=20,
             height=10,
             bg="#C0D9B7",
-            takefocus=0
+            takefocus=0,
+            command=self.openFromFile,
 
         )
         button2.pack()
@@ -331,7 +337,7 @@ class MEDpress(object):
         textEntry= textEntry.rstrip()
         self.templateSearch(textEntry)
 
-    def refreshTmpList(self):
+    def refreshTmpList(self, added=None):
         self.tree.delete(*self.tree.get_children())
 
         datafromfolder = readFolder()
@@ -347,6 +353,15 @@ class MEDpress(object):
         for source, name, time in datafromfolder:
             testowe = ListItem(name, time, source)
             self.templateStack.append(testowe)
+
+        if added:
+            name, source, time = added
+            testowe = ListItem(name, time, source)
+            testowe.updateInstance(name, time, source)
+            self.fromFileStack.append(testowe)
+
+        self.templateStack.extend(self.fromFileStack)
+
         
         number = 0
         for cos in self.templateStack:
@@ -441,10 +456,14 @@ class MEDpress(object):
 
     def getVariablesFromTemp(self, object):
         varlist = []
-        template_source = self.JinjaEnv.loader.get_source(
+        try:
+            template_source = self.JinjaEnv.loader.get_source(
             self.JinjaEnv, object.source)[0]
-        parsed_content = self.JinjaEnv.parse(template_source)
-        varlist = list(meta.find_undeclared_variables(parsed_content))
+            parsed_content = self.JinjaEnv.parse(template_source)
+        except:
+            template_source = readBody(object,object.name,object.source)
+
+        #varlist = list(meta.find_undeclared_variables(parsed_content))
         
         ordered = []
         for m in  re.finditer(r'\{\{\s*(\w+)\s*\}\}',template_source):
@@ -580,6 +599,23 @@ class MEDpress(object):
             root.after(1000,lambda: go(counter))
 
         go(counter)
+
+    def openFromFile(self):
+        #root.withdraw()
+        file_path = filedialog.askopenfilename()
+        if file_path:
+            with open(os.path.join(file_path), "r") as src_file:
+                txttime = time.ctime(os.path.getctime(src_file.name))
+                head, tail = ntpath.split(file_path)
+                #return tail or ntpath.basename(head)
+                name=tail.rstrip(".txt")
+                data = (name, file_path, txttime)
+
+                self.refreshTmpList(data)
+            
+
+
+
 
 
           

@@ -212,7 +212,7 @@ NB = widżet liczby"""
     )
 
     try:
-        plaincode = readBody(template,None)
+        plaincode = readBody(template,template.name,template.source)
         textcode.insert(INSERT,plaincode)
     except:
         plaincode = readTemplate(template)
