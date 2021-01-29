@@ -2,3 +2,4 @@ Jinja2==2.11.2
 jinja2schema==0.1.4
 tkcalendar==1.6.1
 cx-Freeze==6.5
+python-docx==0.8.10

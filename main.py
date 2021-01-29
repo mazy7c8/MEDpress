@@ -16,6 +16,8 @@ import os
 from draw import vardrawing
 from idlelib.tooltip import Hovertip
 import ntpath
+from docx import Document
+from docx.shared import Inches
 
 class MEDpress(object):        
     def __init__(self, parent):
@@ -264,10 +266,11 @@ class MEDpress(object):
             height=2,
             bg="lightgrey",
             takefocus=0,
+            command=self.printPDF
         )
         exportbutton.pack()
         exportbutton.place(x=1156, y=201)        
-        myTip13 = Hovertip(exportbutton,"Otworz powyższe w nowej aplikacji")
+        myTip13 = Hovertip(exportbutton,"Otworz powyższe w formie dokumentu tekstowego")
 
         progressbar = ttk.Progressbar(
             self.frame, orient="horizontal", length=500, mode="determinate")
@@ -612,9 +615,16 @@ class MEDpress(object):
                 data = (name, file_path, txttime)
 
                 self.refreshTmpList(data)
-            
-
-
+    
+    def printPDF(self):
+        textEntry = self.textfield.get("1.0", "end-1c")
+        header = ListItem.returnName(self.found)
+        
+        document = Document()
+        document.add_heading(header, 0)
+        document.add_paragraph(textEntry)
+        #document.add_page_break()
+        document.save('wydruk.docx')
 
 
 

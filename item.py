@@ -25,6 +25,9 @@ class ListItem(object):
         self.abbr=name[0:4]
         self.date=date
         self.source=source
+    
+    def returnName(self):
+        return self.name
 
 
     def makeDict(self,name,source=None):
