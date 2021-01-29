@@ -355,6 +355,7 @@ class vardrawing(tk.Widget):
                     self.window,
                     text="Ustaw",
                     command=createCalendar,
+                    takefocus=1
                 )
             body.pack()
             body.place(x=self.posx, y=self.posy, height=20, width=150)
@@ -368,6 +369,7 @@ class vardrawing(tk.Widget):
                     self.window,
                     text="Zrezygnuj",
                     command=deleteVar,
+                    takefocus=1
                 )
             body2.pack()
             body2.place(x=self.posx+150, y=self.posy, height=20, width=150)
@@ -383,9 +385,11 @@ class vardrawing(tk.Widget):
                     self.window,
                     orient="horizontal",
                     from_=self.extra[0],
-                    to=self.extra[1]
+                    to=self.extra[1],
+                    takefocus=1
                 )
                 sc.pack()
+                sc.focus_set()
                 sc.place(x=self.posx, y=self.posy, height=40, width=300)
                 return sc, sc
             except IndexError:
@@ -393,9 +397,11 @@ class vardrawing(tk.Widget):
                     self.window,
                     orient="horizontal",
                     from_=69,
-                    to=666
+                    to=666,
+                    takefocus=1
                 )
                 sc.pack()
+                sc.focus_set()
                 sc.place(x=self.posx, y=self.posy, height=40, width=300)
                 return sc, sc
 

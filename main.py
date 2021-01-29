@@ -17,7 +17,6 @@ from draw import vardrawing
 from idlelib.tooltip import Hovertip
 import ntpath
 from docx import Document
-from docx.shared import Inches
 
 class MEDpress(object):        
     def __init__(self, parent):
@@ -272,16 +271,11 @@ class MEDpress(object):
         exportbutton.place(x=1156, y=201)        
         myTip13 = Hovertip(exportbutton,"Otworz powyższe w formie dokumentu tekstowego")
 
-        progressbar = ttk.Progressbar(
-            self.frame, orient="horizontal", length=500, mode="determinate")
-        progressbar.pack()
-        progressbar.place(x=511, y=853)
-        progressbar['value'] = 20
 
         progresslabel = tk.Label(
             self.frame,
-            text="Szablon w kolejce 0/X",
-            font=("Helvetica", 10),
+            text="Pasek postępu",
+            font=("Helvetica",12),
             bg=("#ED6868")
         )
         progresslabel.pack()
@@ -306,6 +300,26 @@ class MEDpress(object):
         self.root.bind("<Control-s>", lambda event, : self.getTextEntry())
         self.root.bind("<Control-z>", lambda event, : self.readWork())
         self.root.bind("<Control-c>", lambda event, : self.copyToClipboard())
+
+    def makeProgressBar(self,X):
+        self.progressbar = ttk.Progressbar(
+        self.frame, orient="horizontal", length=500, mode="determinate", maximum=X*10, value=0)
+        self.progressbar.pack()
+        self.progressbar.place(x=511, y=853)
+        self.progressAction()
+
+        
+    def progressAction(self):
+        for item in self.actualDrawings:
+            if(type(item))!=list:
+                item.bind("<Enter>", lambda event : self.progressClick())
+
+    def progressClick(self):
+        self.progressbar['value']+=5
+        
+
+            
+
 
     def copyToClipboard(self):
         self.clipboardbutton.config(bg="#00FF00")
@@ -400,6 +414,7 @@ class MEDpress(object):
                 foundvars = self.getVariablesFromTemp(self.found)
                 self.entryBoxList = self.drawRequests(foundvars,template)
                 self.endworkbutton.lift()
+                self.makeProgressBar(len(foundvars))
                 break
 
     def initializeRender(self, object, dictonary):
