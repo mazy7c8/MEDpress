@@ -17,6 +17,7 @@ from draw import vardrawing
 from idlelib.tooltip import Hovertip
 import ntpath
 from docx import Document
+from apscheduler.schedulers.background import BackgroundScheduler
 
 class MEDpress(object):        
     def __init__(self, parent):
@@ -306,16 +307,37 @@ class MEDpress(object):
         self.frame, orient="horizontal", length=500, mode="determinate", maximum=X*10, value=0)
         self.progressbar.pack()
         self.progressbar.place(x=511, y=853)
-        self.progressAction()
-
+        #self.progressAction()
+        self.scheduler = BackgroundScheduler()
+        self.scheduler.start()
+        self.scheduler.add_job(self.progressAction, 'interval', seconds = 2)
         
-    def progressAction(self):
-        for item in self.actualDrawings:
-            if(type(item))!=list:
-                item.bind("<Enter>", lambda event : self.progressClick())
+    # def progressAction(self):
+    #     for item in self.actualDrawings:
+    #         if(type(item))!=list:
+    #             item.bind("<Enter>", lambda event : self.progressClick())
 
-    def progressClick(self):
-        self.progressbar['value']+=5
+    # def progressClick(self):
+    #     self.progressbar['value']+=5
+
+    def progressAction(self):
+        readed = {}
+        self.progressbar['value']=0
+        for keys,values in self.entryBoxList.items():
+            try:
+                if type(values) is list:
+                    final=""
+                    for value in values:
+                        if value.get()!='':
+                            final+=value.get()+", "
+                        readed[keys]=final.rstrip(", ")
+
+                else: readed[keys] = self.entryBoxList[keys].get()
+
+                if readed[keys]!="":
+                    self.progressbar['value']+=10
+            except:
+                pass
         
 
             
@@ -570,6 +592,7 @@ class MEDpress(object):
         return varentry
 
     def readWork(self):
+        self.scheduler.remove_all_jobs()
         self.endworkbutton.config(bg="#00FF00")
         root.after(100, lambda: self.endworkbutton.config(bg='lightgrey'))
         readed = {}
