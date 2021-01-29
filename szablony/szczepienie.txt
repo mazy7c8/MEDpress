@@ -1,0 +1,3 @@
+### {"dzien": "DT", "choroba": ["RC", "grypa", "covid", "różyczka"], "imie": "TX", "liczba": ["NB", "1", "20"], "godzina": "TX", "nazwisko": "TX"}
+
+Zaświadczenie o przeprowadzonym lekarskim badaniu kwalifikacyjnym. W wyniku przeprowadzonego w dniu {{dzien}} o godz.{{godzina}} lekarskiego badania kwalifikacyjnego zaświadcza się , że Pacjent {{imie}} {{nazwisko}} stwierdzono brak przeciwwskazań do przeprowadzenia dobrowolnego szczepienia ochronnego przeciw {{choroba}} w okresie do {{liczba}} godzin od przeprowadzenia badania kwalifikacyjnego.

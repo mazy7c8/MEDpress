@@ -101,7 +101,8 @@ class vardrawing(tk.Widget):
             body = tk.ttk.Combobox(
                     self.window,
                     values=self.extra,  
-                    state="readonly"    
+                    state="readonly",
+                    takefocus=1  
                 )
             body.pack()
             body.place(x=self.posx, y=self.posy, height=20, width=300)
